@@ -48,3 +48,7 @@ Thumbs.db
 *.mov
 *.wmv
 
+moodle/
+front/node_modules/
+secretaria/node_modules/
+www/
