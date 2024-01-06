@@ -4,6 +4,7 @@ import br.com.minerva.minerva.domain.Empresa;
 import br.com.minerva.minerva.domain.Perfil;
 import br.com.minerva.minerva.domain.PerfilUsuarioEmpresa;
 import br.com.minerva.minerva.domain.Usuario;
+import br.com.minerva.minerva.model.PerfilDTO;
 import br.com.minerva.minerva.model.UsuarioDTO;
 import br.com.minerva.minerva.model.UsuarioNovoDTO;
 import br.com.minerva.minerva.moodle.WebServiceMoodle;
@@ -108,6 +109,7 @@ public class UsuarioService {
         this.perfilUsuarioEmpresaRepository.save(perfilusuario);
     }
 
+
     public void delete(final UUID idusuario) {
         usuarioRepository.deleteById(idusuario);
     }
@@ -142,6 +144,13 @@ public class UsuarioService {
         usuario.setSenha(usuarioDTO.getSenha());
         return usuario;
     }
+    public List<PerfilDTO> getPerilEmpresa(UUID idusuario, UUID idEmpresa){
+        return this.perfilUsuarioEmpresaRepository.findByIdusuarioAndIdempresa(idusuario, idEmpresa).stream().map( PerfilDTO::new ).toList();
+    }
+
+
+
+
 
     public boolean emailExists(final String email) {
         return usuarioRepository.existsByEmailIgnoreCase(email);

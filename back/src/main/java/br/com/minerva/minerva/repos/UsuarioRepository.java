@@ -2,9 +2,10 @@ package br.com.minerva.minerva.repos;
 
 import br.com.minerva.minerva.domain.Usuario;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 
 public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
@@ -13,5 +14,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
 
     boolean existsByCpfIgnoreCase(String cpf);
 
-    List<Usuario> findAllByIdempresa(UUID idempresa);
+    @Query("""
+            select u
+              from Usuario u
+             where email = :login
+                or cpf = :login
+            """)
+    Usuario getUsuarioByLogin(String login);
+
 }

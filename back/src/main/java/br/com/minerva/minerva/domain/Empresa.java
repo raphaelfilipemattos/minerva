@@ -67,11 +67,11 @@ public class Empresa {
 
     private boolean ambientecriado;
 
-    @OneToMany(mappedBy = "idempresa")
-    private Set<PerfilEmpresa> idempresaPerfilEmpresas;
+    @OneToMany(mappedBy = "empresa")
+    private Set<PerfilEmpresa> empresaPerfilEmpresas;
 
-    @OneToMany(mappedBy = "idempresa")
-    private Set<PerfilUsuarioEmpresa> idempresaPerfilUsuarioEmpresas;
+    @OneToMany(mappedBy = "empresa")
+    private Set<PerfilUsuarioEmpresa> empresaPerfilUsuarioEmpresas;
 
 
 

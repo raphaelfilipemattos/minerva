@@ -27,7 +27,7 @@ public class CriaAmbienteService {
 
     }
 
-    @Scheduled(fixedRate = 20 , timeUnit = TimeUnit.SECONDS)
+    //@Scheduled(fixedRate = 20 , timeUnit = TimeUnit.SECONDS)
     public void criaAmbiente(){
        try {
           var empresas = this.empresaRepository.findAllByAmbientecriadoIsFalse();

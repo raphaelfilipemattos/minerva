@@ -12,6 +12,9 @@ public interface EmpresaRepository extends JpaRepository<Empresa, UUID> {
 
     List<Empresa> findAllByAmbientecriadoIsFalse();
 
+    Empresa findByDominioava(String dominioava);
+    Empresa findByDominio(String dominio);
+
     boolean existsByCnpjCpfIgnoreCase(String cnpjCpf);
 
 

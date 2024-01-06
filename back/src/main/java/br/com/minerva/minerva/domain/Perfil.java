@@ -35,7 +35,7 @@ public class Perfil {
     @OneToMany(mappedBy = "idperfil")
     private Set<PerfilEmpresa> idperfilPerfilEmpresas;
 
-    @OneToMany(mappedBy = "idperfil")
-    private Set<PerfilUsuarioEmpresa> idperfilPerfilUsuarioEmpresas;
+    @OneToMany(mappedBy = "perfil")
+    private Set<PerfilUsuarioEmpresa> perfilPerfilUsuarioEmpresas;
 
 }

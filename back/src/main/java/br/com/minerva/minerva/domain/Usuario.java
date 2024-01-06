@@ -33,7 +33,7 @@ public class Usuario {
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false)
     private String senha;
 
     @Column(nullable = false)
@@ -48,7 +48,9 @@ public class Usuario {
     @OneToMany(mappedBy = "idusuario")
     private Set<Inscricao> idusuarioInscricaos;
 
-    @OneToMany(mappedBy = "idusuario")
-    private Set<PerfilUsuarioEmpresa> idusuarioPerfilUsuarioEmpresas;
+    @OneToMany(mappedBy = "usuario")
+    private Set<PerfilUsuarioEmpresa> usuarioPerfilUsuarioEmpresas;
+
+
 
 }

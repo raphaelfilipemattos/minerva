@@ -29,7 +29,7 @@ public class PerfilEmpresa {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idempresa", nullable = false)
-    private Empresa idempresa;
+    private Empresa empresa;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idperfil", nullable = false)
