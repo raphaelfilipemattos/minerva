@@ -82,26 +82,27 @@ public class UsuarioService {
 
     public void sincronizaMoodle(Empresa empresa, UsuarioDTO usuarioDTO){
         this.webServiceMoodle.setEmpresa(empresa);
-        var usuarioMoodle = new UsuarioMoodleModel();
+        var usuarioMoodle = this.webServiceMoodle.getUsuarioByUsername(usuarioDTO.getIdusuario().toString());
+        if (usuarioMoodle == null){
+            usuarioMoodle = new UsuarioMoodleModel();
+            usuarioMoodle.setIdnumber(usuarioDTO.getIdusuario().toString());
+            usuarioMoodle.setUsername(usuarioDTO.getIdusuario().toString());
+        }
+
         usuarioMoodle.setEmail(usuarioDTO.getEmail());
         usuarioMoodle.setFirstname(usuarioDTO.getNome());
         usuarioMoodle.setLastname(usuarioDTO.getNome());
-        usuarioMoodle.setPassword(usuarioDTO.getSenha());
-        usuarioMoodle.setIdnumber(usuarioDTO.getIdusuario().toString());
-        usuarioMoodle.setUsername(usuarioDTO.getIdusuario().toString());
         usuarioMoodle = this.webServiceMoodle.cria_atualiza_Usuario(usuarioMoodle);
-        this.addPerfilUsuarioEmpresa(empresa,usuarioMoodle,Perfil.ALUNO);
+        this.addPerfilUsuarioEmpresa(empresa,usuarioDTO,usuarioMoodle, Perfil.ALUNO);
 
     }
 
-    private void addPerfilUsuarioEmpresa(Empresa empresa, UsuarioMoodleModel usuarioMoodleModel, UUID idperfil){
-        var perfilusuario =  this.perfilUsuarioEmpresaRepository.findByIdusuarioAndIdempresaAndIdperfil(empresa.getIdempresa(), UUID.fromString(usuarioMoodleModel.getIdnumber()),idperfil);
+    private void addPerfilUsuarioEmpresa(Empresa empresa, UsuarioDTO usuarioDTO,UsuarioMoodleModel usuarioMoodleModel, UUID idperfil){
+        var perfilusuario =  this.perfilUsuarioEmpresaRepository.findByIdusuarioAndIdempresaAndIdperfil(empresa.getIdempresa(), usuarioDTO.getIdusuario(),idperfil);
         if (perfilusuario == null){
             perfilusuario = new PerfilUsuarioEmpresa();
         }
-
-        var usuario = this.usuarioRepository.findById(UUID.fromString(usuarioMoodleModel.getIdnumber())).get();
-
+        var usuario = this.usuarioRepository.getReferenceById(usuarioDTO.getIdusuario());
         perfilusuario.setEmpresa(empresa);
         perfilusuario.setIdusuarioMoodle(Integer.toUnsignedLong(usuarioMoodleModel.getId()));
         perfilusuario.setUsuario(usuario);
@@ -146,7 +147,7 @@ public class UsuarioService {
     }
     public List<PerfilDTO> getPerilEmpresa(UUID idusuario, UUID idEmpresa){
         return this.perfilUsuarioEmpresaRepository.findByIdusuarioAndIdempresa(idusuario, idEmpresa).stream().map( PerfilDTO::new ).toList();
-    }
+        }
 
 
 

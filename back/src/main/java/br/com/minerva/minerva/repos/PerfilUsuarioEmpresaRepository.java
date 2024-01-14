@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 
 
 public interface PerfilUsuarioEmpresaRepository extends JpaRepository<PerfilUsuarioEmpresa, UUID> {
-    @Query("""
-              select perfil.idperfil, perfil.nome
+    @Query(  """
+              select NEW  br.com.minerva.minerva.domain.Perfil( perfil.idperfil, perfil.nome )
                  from PerfilUsuarioEmpresa pue
                 inner join pue.perfil perfil                                      
                 where pue.usuario.idusuario = :idusuario
@@ -25,7 +25,7 @@ public interface PerfilUsuarioEmpresaRepository extends JpaRepository<PerfilUsua
                   and empresa.idempresa = :idempresa
                   and perfil.idperfil = :idperfil
             """)
-    PerfilUsuarioEmpresa findByIdusuarioAndIdempresaAndIdperfil(UUID idusuario,UUID idempresa, UUID idperfil);
+    PerfilUsuarioEmpresa findByIdusuarioAndIdempresaAndIdperfil(UUID idempresa,UUID idusuario, UUID idperfil);
 
 
 }

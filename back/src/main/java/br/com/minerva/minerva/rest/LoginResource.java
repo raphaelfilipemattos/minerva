@@ -48,8 +48,9 @@ public class LoginResource {
         this.usuarioService.sincronizaMoodle(empresa, usuarioLogado);
 
         usuarioLogado.setIdempresa(empresa.getIdempresa());
-        usuarioLogado.setPerfil(this.usuarioService.getPerilEmpresa(usuarioLogado.getIdusuario(), empresa.getIdempresa()));
+        var perfis = this.usuarioService.getPerilEmpresa(usuarioLogado.getIdusuario(), empresa.getIdempresa());
+        usuarioLogado.setPerfil(perfis);
 
-        return ResponseEntity.ok( new AutenticacaoUsuarioDTO(this.tokenService.geraToken( usuarioLogado ) , usuarioLogado));
+        return ResponseEntity.ok( new AutenticacaoUsuarioDTO(this.tokenService.geraToken( usuarioLogado ),usuarioLogado ));
     }
 }
