@@ -1,11 +1,14 @@
 package br.com.minerva.minerva.rest;
 
+import br.com.minerva.minerva.config.Ambiente;
 import br.com.minerva.minerva.model.CursoDTO;
 import br.com.minerva.minerva.service.CursoService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/cursos", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CursoResource {
+public class CursoResource extends RestControlerPadrao{
 
     private final CursoService cursoService;
 

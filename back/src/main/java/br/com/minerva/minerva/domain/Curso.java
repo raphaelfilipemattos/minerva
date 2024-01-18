@@ -36,8 +36,6 @@ public class Curso {
     @Column(nullable = false)
     private Boolean ativo;
 
-    @Column(nullable = false)
-    private Long seq;
 
     @Column(nullable = false)
     private Long idcourseMoodle;
@@ -51,12 +49,12 @@ public class Curso {
     @Column(columnDefinition = "text")
     private String descricaoCompleta;
 
-    @OneToMany(mappedBy = "idcurso")
+    @OneToMany(mappedBy = "curso")
     private Set<CursoTurma> idcursoCursoTurmas;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idempresa", nullable = false)
-    private Empresa idempresa;
+    private Empresa empresa;
 
     @OneToMany(mappedBy = "idcurso")
     private Set<Inscricao> idcursoInscricaos;

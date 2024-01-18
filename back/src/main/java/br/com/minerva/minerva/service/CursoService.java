@@ -1,19 +1,19 @@
 package br.com.minerva.minerva.service;
 
+import br.com.minerva.minerva.config.Ambiente;
 import br.com.minerva.minerva.domain.Curso;
 import br.com.minerva.minerva.domain.Empresa;
 import br.com.minerva.minerva.model.CursoDTO;
 import br.com.minerva.minerva.moodle.WebServiceMoodle;
 import br.com.minerva.minerva.moodle.models.CategoriaMoodleModel;
-import br.com.minerva.minerva.moodle.models.CursoMoodleModel;
 import br.com.minerva.minerva.repos.CursoRepository;
 import br.com.minerva.minerva.repos.EmpresaRepository;
 import br.com.minerva.minerva.util.NotFoundException;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -25,6 +25,12 @@ public class CursoService {
     @Autowired
     private WebServiceMoodle webServiceMoodle;
 
+    @Autowired
+    private Ambiente ambiente;
+
+    @Autowired
+    private SalaService salaService;
+
     public CursoService(final CursoRepository cursoRepository,
                         final EmpresaRepository empresaRepository) {
         this.cursoRepository = cursoRepository;
@@ -32,28 +38,38 @@ public class CursoService {
     }
 
     public List<CursoDTO> findAll() {
-        final List<Curso> cursoes = cursoRepository.findAll(Sort.by("idcurso"));
+        final List<Curso> cursoes = cursoRepository.findAllByIdempresa(this.ambiente.getEmpresaAtual().getIdempresa());
         return cursoes.stream()
                 .map(curso -> mapToDTO(curso, new CursoDTO()))
                 .toList();
     }
 
     public CursoDTO get(final UUID idcurso) {
-        return cursoRepository.findById(idcurso)
-                .map(curso -> mapToDTO(curso, new CursoDTO()))
-                .orElseThrow(NotFoundException::new);
+        var cursoLocalizado =  cursoRepository.findById(idcurso)
+                    .map(curso -> mapToDTO(curso, new CursoDTO()))
+                    .orElseThrow(NotFoundException::new);
+        if (cursoLocalizado.getIdempresa() != this.ambiente.getEmpresaAtual().getIdempresa()){
+            throw new RuntimeException("Curso não é dessa empresa");
+        }
+
+        return cursoLocalizado;
     }
 
+    @Transactional
     public UUID create(final CursoDTO cursoDTO) {
         final Curso curso = new Curso();
-        final Empresa empresa = this.empresaRepository.getReferenceById(cursoDTO.getIdempresa());
-        this.webServiceMoodle.setEmpresa(empresa);
+        this.webServiceMoodle.setEmpresa(this.ambiente.getEmpresaAtual());
         CategoriaMoodleModel categoriaMoodleModel = new CategoriaMoodleModel();
         mapToEntity(cursoDTO, curso);
+        curso.setEmpresa(this.ambiente.getEmpresaAtual());
         mapToCategoriaMoodleModel(curso, categoriaMoodleModel);
         categoriaMoodleModel = webServiceMoodle.criaCategria(categoriaMoodleModel);
         curso.setIdcourseMoodle(Integer.toUnsignedLong(categoriaMoodleModel.getId()));
-        return cursoRepository.save(curso).getIdcurso();
+
+        var idCurso = cursoRepository.save(curso).getIdcurso();
+
+        this.salaService.criaAtualizaSala(cursoDTO, curso, this.webServiceMoodle);
+        return idCurso;
     }
 
     public void update(final UUID idcurso, final CursoDTO cursoDTO) {
@@ -61,6 +77,14 @@ public class CursoService {
                 .orElseThrow(NotFoundException::new);
         mapToEntity(cursoDTO, curso);
         cursoRepository.save(curso);
+        this.webServiceMoodle.setEmpresa(curso.getEmpresa());
+
+        var categoriaMoodleModel = webServiceMoodle.getCategoriabyId(curso.getIdcourseMoodle().intValue());
+        mapToCategoriaMoodleModel(curso, categoriaMoodleModel);
+        webServiceMoodle.atualizaCategria(categoriaMoodleModel);
+        curso.setIdcourseMoodle(Integer.toUnsignedLong(categoriaMoodleModel.getId()));
+
+        this.salaService.criaAtualizaSala(cursoDTO, curso, this.webServiceMoodle);
     }
 
     public void delete(final UUID idcurso) {
@@ -73,7 +97,7 @@ public class CursoService {
         cursoDTO.setApelido(curso.getApelido());
         cursoDTO.setValor(curso.getValor());
         cursoDTO.setDescricaoCompleta(curso.getDescricaoCompleta());
-        cursoDTO.setIdempresa(curso.getIdempresa() == null ? null : curso.getIdempresa().getIdempresa());
+        cursoDTO.setIdempresa(curso.getEmpresa() == null ? null : curso.getEmpresa().getIdempresa());
         return cursoDTO;
     }
 
@@ -81,7 +105,7 @@ public class CursoService {
 
         //categoriaMoodleModel.setId(curso.getIdcourseMoodle().intValue());
         categoriaMoodleModel.setName(curso.getNomeCurso());
-        categoriaMoodleModel.setDescricao(curso.getDescricaoCompleta());
+        categoriaMoodleModel.setDescription(curso.getDescricaoCompleta());
         categoriaMoodleModel.setParent(0);
         return categoriaMoodleModel;
     }
@@ -91,9 +115,16 @@ public class CursoService {
         curso.setApelido(cursoDTO.getApelido());
         curso.setValor(cursoDTO.getValor());
         curso.setDescricaoCompleta(cursoDTO.getDescricaoCompleta());
-        final Empresa idempresa = cursoDTO.getIdempresa() == null ? null : empresaRepository.findById(cursoDTO.getIdempresa())
+       /* final Empresa idempresa = cursoDTO.getIdempresa() == null ? null : empresaRepository.findById(cursoDTO.getIdempresa())
                 .orElseThrow(() -> new NotFoundException("idempresa not found"));
-        curso.setIdempresa(idempresa);
+        curso.setEmpresa(idempresa);
+
+        */
+        if (cursoDTO.getAtivo() == null ){
+            curso.setAtivo(true);
+        }else {
+            curso.setAtivo(cursoDTO.getAtivo());
+        }
         return curso;
     }
 

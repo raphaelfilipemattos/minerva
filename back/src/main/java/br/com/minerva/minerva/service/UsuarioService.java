@@ -151,8 +151,6 @@ public class UsuarioService {
 
 
 
-
-
     public boolean emailExists(final String email) {
         return usuarioRepository.existsByEmailIgnoreCase(email);
     }

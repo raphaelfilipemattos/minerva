@@ -55,8 +55,8 @@ public class Empresa {
     private String dominioava;
 
 
-    @OneToMany(mappedBy = "idempresa")
-    private Set<Curso> idempresaCursoes;
+    @OneToMany(mappedBy = "empresa")
+    private Set<Curso> empresaCursoes;
 
     @OneToMany(mappedBy = "idempresa")
     private Set<EmpresaEstilo> idempresaEmpresaEstiloes;

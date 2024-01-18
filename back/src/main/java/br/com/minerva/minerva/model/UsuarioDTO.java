@@ -1,5 +1,8 @@
 package br.com.minerva.minerva.model;
 
+import br.com.minerva.minerva.domain.Usuario;
+import br.com.minerva.minerva.repos.PerfilRepository;
+import br.com.minerva.minerva.repos.PerfilUsuarioEmpresaRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -12,6 +15,7 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.tomcat.util.security.MD5Encoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -79,6 +83,24 @@ public class UsuarioDTO extends @Valid UsuarioNovoDTO implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UsuarioDTO(Usuario usuario, UUID idempresa,PerfilUsuarioEmpresaRepository perfilUsuarioEmpresaRepository){
+        super();
+        this.setIdusuario(usuario.getIdusuario());
+        this.setNome(usuario.getNome());
+        this.setEmail(usuario.getEmail());
+        this.setCpf(usuario.getCpf());
+        this.setSenha(usuario.getSenha());
+        this.setSeq(usuario.getSeq());
+        this.setDataCadastro(usuario.getDataCadastro());
+        this.setLastChange(usuario.getLastChange());
+        this.setIdempresa(idempresa);
+        this.perfil = perfilUsuarioEmpresaRepository.findByIdusuarioAndIdempresa(usuario.getIdusuario(), idempresa).stream().map(PerfilDTO::new).toList();
+    }
+
+    public UsuarioDTO(){
+        super();
     }
 
 }

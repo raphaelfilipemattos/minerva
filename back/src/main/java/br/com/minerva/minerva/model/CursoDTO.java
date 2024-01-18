@@ -2,13 +2,16 @@ package br.com.minerva.minerva.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 
 @Getter
@@ -36,6 +39,13 @@ public class CursoDTO {
     private String descricaoCompleta;
 
     @NotNull
+    private LocalDate dataIni;
+    @NotNull
+    private LocalDate dataFim;
+
+
     private UUID idempresa;
+
+    private Boolean ativo;
 
 }
