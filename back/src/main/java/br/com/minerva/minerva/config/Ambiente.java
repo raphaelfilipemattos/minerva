@@ -70,6 +70,12 @@ public class Ambiente {
         if (urlEmpresa == null){
             throw new RuntimeException("Header urlempresa não definido ");
         }
+        urlEmpresa = urlEmpresa.replace("https://","")
+                               .replace("http://","")
+                               .replace(":3000","");
+        if (urlEmpresa.endsWith("/")){
+            urlEmpresa = urlEmpresa.substring(0,urlEmpresa.length()-1);
+        }
         var empresa  = this.empresaRepository.findByDominio(urlEmpresa);
         if (empresa == null){
             throw new RuntimeException("Empresa não localizada com a url informada ");

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.DigestUtils;
 
 
 @Getter
@@ -61,8 +62,8 @@ public class UsuarioDTO extends @Valid UsuarioNovoDTO implements UserDetails {
 
     @Override
     public String getUsername() {
-        var temp = this.getCpf()+this.getEmail();
-        return MD5Encoder.encode(temp.toString().getBytes());
+        var temp = this.getEmail();
+        return DigestUtils.md5DigestAsHex(temp.getBytes()).toUpperCase();
     }
 
     @Override
