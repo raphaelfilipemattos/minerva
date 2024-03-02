@@ -1,0 +1,17 @@
+.footer{
+    background-color: rgb(48, 47, 47);
+    height: 6em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.texto{
+    color: #ffffff;
+    font-size: 10pt;
+    font-weight: 700;
+    background-color: inherit;
+}

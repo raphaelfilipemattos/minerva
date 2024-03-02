@@ -1,0 +1,55 @@
+
+.nome_curso{
+    color: white;
+    text-shadow: black;
+}
+
+.course_content {
+    padding: 15px;
+  }
+  
+.course_content h3 {
+    font-weight: 700;
+    font-size: 20px;
+  }
+  
+.course_content h3 a {
+    color: #37423b;
+    transition: 0.3s;
+  }
+  
+.course_content h3 a:hover {
+    color: #5fcf80;
+  }
+  
+.course_content p {
+    font-size: 14px;
+    color: #777777;
+  }
+  
+.course_content h4 {
+    font-size: 14px;
+    background: #5fcf80;
+    padding: 7px 14px;
+    color: #fff;
+    margin: 0;
+  }
+  
+.course_content .price {
+    margin: 0;
+    font-weight: 700;
+    font-size: 18px;
+    color: #37423b;
+  }
+
+ .course_item {
+    border-radius: 5px;
+    border: 1px solid #eef0ef;
+}
+
+
+.course_info {
+  background: #f6f7f6;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+}

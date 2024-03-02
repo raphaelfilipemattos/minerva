@@ -1,0 +1,11 @@
+.home{
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+    padding: 1em;
+}
+.imagemCapa{
+    width: 100%;
+    height: auto;
+}
