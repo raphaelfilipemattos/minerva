@@ -1,7 +1,17 @@
 import { UUID } from "crypto";
 import PerfilModel from "./PerfilModel";
+import InterfaceModel from "./InterfaceModel";
 
-class LoginModel{
+class LoginModel implements InterfaceModel {
+   getCampoId(): string {
+      throw new Error("Method not implemented.");
+   }
+   getCampoDisplay(): string {
+      throw new Error("Method not implemented.");
+   }
+   getDescricaoTabela(): string {
+      throw new Error("Method not implemented.");
+   }
    token?: string;
    idusuario?: UUID;
    nome?: string;

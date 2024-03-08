@@ -7,6 +7,7 @@ import br.com.minerva.minerva.model.CursoDTO;
 import br.com.minerva.minerva.moodle.WebServiceMoodle;
 import br.com.minerva.minerva.moodle.models.CategoriaMoodleModel;
 import br.com.minerva.minerva.repos.CursoRepository;
+import br.com.minerva.minerva.repos.CursoSalaRepository;
 import br.com.minerva.minerva.repos.EmpresaRepository;
 import br.com.minerva.minerva.util.NotFoundException;
 import java.util.List;
@@ -24,6 +25,9 @@ public class CursoService {
     private final EmpresaRepository empresaRepository;
     @Autowired
     private WebServiceMoodle webServiceMoodle;
+
+    @Autowired
+    private CursoSalaRepository cursoSalaRepository;
 
     @Autowired
     private Ambiente ambiente;
@@ -97,6 +101,10 @@ public class CursoService {
         cursoDTO.setApelido(curso.getApelido());
         cursoDTO.setValor(curso.getValor());
         cursoDTO.setDescricaoCompleta(curso.getDescricaoCompleta());
+        var cursoSala = this.cursoSalaRepository.findByIdCurso(curso.getIdcurso());
+        cursoDTO.setDataIni(cursoSala.getDataIni());
+        cursoDTO.setDataFim(cursoSala.getDataFim());
+        cursoDTO.setAtivo(curso.getAtivo());
         cursoDTO.setIdempresa(curso.getEmpresa() == null ? null : curso.getEmpresa().getIdempresa());
         return cursoDTO;
     }

@@ -1,5 +1,15 @@
+.tabela{
+
+}
+.tabela h2{
+   font-weight: 600;
+   font-size: 18pt;
+   border-bottom: 3px solid rgb(146, 182, 236); 
+   width: fit-content;
+}
 .icons{
     font-size: larger   ;
     height: fit-content;
     cursor: pointer;
 }
+

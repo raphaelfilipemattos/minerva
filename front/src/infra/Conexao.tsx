@@ -29,7 +29,11 @@ async function Conexao(verbo: string, servico: string, parametros: any) {
                             return respostaApi;
                         }).catch(err => console.log(err))
     if (respostaApi== null) return null;
-    return await respostaApi.json();        
+    
+    if (verbo != "DEELETE"){
+        return await respostaApi.json();        
+    }
+    return true;
 }
 
 

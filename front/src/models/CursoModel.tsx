@@ -1,4 +1,16 @@
-class CursoModel {
+import InterfaceModel from "./InterfaceModel";
+
+class CursoModel implements InterfaceModel {
+    getCampoDisplay(): string {
+        return "nomeCurso";
+    }
+    public  getCampoId(): string {
+        return "idcurso";
+    }
+    public getDescricaoTabela(): string {
+        return "Cursos";
+    }
+
     idCurso?: string;
     nomeCurso?: string;
     descricaoCompleta?: string;
@@ -8,7 +20,10 @@ class CursoModel {
     dataIni?: Date;
     dataFim?: Date;
     ativo?: boolean;
+
+    
         
 }
 
 
+export default CursoModel;

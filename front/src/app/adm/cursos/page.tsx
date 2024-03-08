@@ -3,6 +3,7 @@ import CursosServices from "@/services/CursosServices";
 import { useEffect, useState } from "react";
 import Table from "@/componentes/core/table/Table";
 import CamposForm, { TipoCampo } from "@/componentes/core/form/CamposForm";
+import CursoModel from "@/models/CursoModel";
 
 export default function AdmCursosPage(){
     const [cursos, setCursos] =  useState<Array<CursoModel>>();    
@@ -36,19 +37,17 @@ export default function AdmCursosPage(){
     camposForm.push(new CamposForm("ativo","Esse curso ainda está ativo?",true,TipoCampo.boolean,0,""));
     camposForm.push(new CamposForm("imagemCapa","Imagem para Capa",false,TipoCampo.TextArea,0,"Imagem ilustrativa do curso."));
    
-    const novoRecord = new CursoModel();
     
     return (
         cursos &&
         <section >
             <Table                 
                 camposListagem={camposListagem}
-                camposFormulario={camposForm}
-                dados={cursos}
-                campoId="idcurso"
-                novoRecord={novoRecord}
+                camposFormulario={camposForm}                
+                campoId="idcurso"                
                 descricao="Curso"
-                endpoint="cursos"                
+                endpoint="cursos"  
+                classModel={CursoModel}              
                 incluirNovoRegistro={true}                
             />
         </section>

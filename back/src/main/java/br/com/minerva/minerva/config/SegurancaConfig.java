@@ -44,6 +44,7 @@ public class SegurancaConfig {
                     authorizationManagerRequestMatcherRegistry
                              .requestMatchers(HttpMethod.POST,"/api/login").permitAll()
                              .requestMatchers(HttpMethod.GET,"/api/cursos").permitAll()
+                             .requestMatchers(HttpMethod.GET,"/api/geral/**").permitAll()
                              .requestMatchers(HttpMethod.OPTIONS,"/api/**").permitAll()
                              .anyRequest().authenticated();
                 })

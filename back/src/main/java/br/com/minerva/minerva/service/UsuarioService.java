@@ -50,6 +50,18 @@ public class UsuarioService {
                 .toList();
     }
 
+    public List<UsuarioDTO> getUsuariosEmpresa(UUID idempresa, UUID idperfil) {
+        final List<Usuario> usuarios ;
+        if(idperfil == null) {
+            usuarios = usuarioRepository.getUsuariosEmpresa(idempresa);
+        }else{
+            usuarios = usuarioRepository.getUsuariosEmpresaByPerfil(idempresa,idperfil);
+        }
+        return usuarios.stream()
+                .map(usuario -> mapToDTO(usuario, new UsuarioDTO()))
+                .toList();
+    }
+
     public UsuarioDTO get(final UUID idusuario) {
         return usuarioRepository.findById(idusuario)
                 .map(usuario -> mapToDTO(usuario, new UsuarioDTO()))

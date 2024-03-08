@@ -1,6 +1,8 @@
 package br.com.minerva.minerva.rest;
 
+import br.com.minerva.minerva.config.Ambiente;
 import br.com.minerva.minerva.domain.Empresa;
+import br.com.minerva.minerva.domain.Perfil;
 import br.com.minerva.minerva.model.UsuarioDTO;
 import br.com.minerva.minerva.model.UsuarioNovoDTO;
 import br.com.minerva.minerva.service.UsuarioService;
@@ -32,9 +34,19 @@ public class UsuarioResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> getAllUsuarios() {
-        return ResponseEntity.ok(usuarioService.findAll());
+    public ResponseEntity<List<UsuarioDTO>> getAllUsuariosEmpresa() {
+        return ResponseEntity.ok(usuarioService.getUsuariosEmpresa(Ambiente.getUsuarioLogado().getIdempresa(), null ) );
     }
+    @GetMapping("/professores")
+    public ResponseEntity<List<UsuarioDTO>> getAllProfessoresEmpresa() {
+        return ResponseEntity.ok(usuarioService.getUsuariosEmpresa(Ambiente.getUsuarioLogado().getIdempresa(), Perfil.PROFESSOR) );
+    }
+
+    @GetMapping("/alunos")
+    public ResponseEntity<List<UsuarioDTO>> getAllAlunosEmpresa() {
+        return ResponseEntity.ok(usuarioService.getUsuariosEmpresa(Ambiente.getUsuarioLogado().getIdempresa(), Perfil.ALUNO) );
+    }
+
 
     @GetMapping("/{idusuario}")
     public ResponseEntity<UsuarioDTO> getUsuario(

@@ -1,3 +1,4 @@
+import InterfaceModel from "@/models/InterfaceModel";
 import style from "./form.module.css";
 export  enum TipoCampo{
     string,
@@ -15,6 +16,7 @@ export default class CamposForm{
     tipoCampo?: TipoCampo;
     maxLength?: number;
     descricao?: string;
+    itens?: Array<InterfaceModel>;
    
 
 
@@ -23,7 +25,9 @@ export default class CamposForm{
         obrigatorio: boolean,
         tipoCampo: TipoCampo,
         maxLength?: number,
-        descricao?: string){
+        descricao?: string,
+        itens?: Array<InterfaceModel>
+        ){
 
        this.nomeCampo = nomeCampo;     
        this.displayCampo = displayCampo;     
@@ -31,10 +35,15 @@ export default class CamposForm{
        this.tipoCampo = tipoCampo;     
        this.maxLength = maxLength;
        this.descricao = descricao;
+       this.itens = itens;
 
        if (this.tipoCampo == TipoCampo.string && ! this.maxLength ){
          throw "Campo do tipo string tem que ter maxLength definido";
        }
+
+       if (this.tipoCampo == TipoCampo.map && this.itens == null ){
+        throw "Campo do tipo map tem que ter itens definido";
+      }
     }
 
     private getTextArea(valorPadrao?: any){
@@ -48,9 +57,14 @@ export default class CamposForm{
     }
 
     private getMap(valorPadrao?: any){
-        //const valoresMap= new Map<string,string>(valorPadrao);
-        return (<select className={style.input__field} name={this.nomeCampo} required={this.obrigatorio}> 
-                   
+        return (this.itens &&
+                 <select className={style.input__field} name={this.nomeCampo} required={this.obrigatorio}> 
+                  {this.itens.map((item, key) =>{
+                    const keyValue = item[item.getCampoId()];
+                    const display = item[item.getCampoDisplay()];
+                    const checked = keyValue == valorPadrao ? true : false;
+                    return (<option key={key} value={keyValue} defaultChecked={checked}> {display} </option>);
+                  })} 
                 </select>  );                
     }
 
@@ -81,14 +95,15 @@ export default class CamposForm{
                                             name={this.nomeCampo} 
                                             required={this.obrigatorio} 
                                             type= "number"
-                                            defaultValue={valorPadrao}                     
+                                            defaultValue={ valorPadrao}                     
                                             onChange={event => {this.onChange(event)}} /> ),  
-            [TipoCampo.date]     : (<input 
+            [TipoCampo.date]     : (            
+                            <input 
                                         className={style.input__field} 
                                         name={this.nomeCampo} 
                                         required={this.obrigatorio} 
                                         type= "date"
-                                        defaultValue={valorPadrao}                     
+                                        defaultValue={ valorPadrao}                     
                                         onChange={event => {this.onChange(event)}} /> ),
             [TipoCampo.map]      : this.getMap(valorPadrao),
             [TipoCampo.TextArea] : this.getTextArea(valorPadrao)

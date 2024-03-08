@@ -28,6 +28,7 @@ export default function Login(){
                       type="email"  
                       className={style.input} 
                       placeholder="Informe seu e-mail"
+                      autoFocus
                       onChange={event => setUsuario(event.target.value)}
                       />
                 </div>
