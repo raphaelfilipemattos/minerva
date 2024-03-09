@@ -1,15 +1,23 @@
 import Image from 'next/image'
 import style from "./curso.module.css";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { ConexaoGET } from '@/infra/Conexao';
 
 export default function ItemCarrocel({curso,indexItem} : {curso: CursoModel,indexItem: Number}){
     let isActive = indexItem == 0? "active":"";
+    const [imagem, setImagem] = useState<string>("/img/curso.jpg");
+    if (curso.imagemCapa != null ){
+        ConexaoGET<string>(curso.imagemCapa,false).then(image64 => {
+                setImagem(image64);
+            })
+    }    
+    
     return(
         <div className="col-lg-4 col-md-6 d-flex align-items-stretch">
             <div className= {style.course_item}>
                 <Image
-                src="/img/curso.jpg" 
+                src={imagem}
                 className="img-fluid" 
                 alt="..."
                 width={500}
