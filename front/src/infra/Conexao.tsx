@@ -1,7 +1,7 @@
 import EmpresaModel from "@/models/EmpresaModel";
 import TokenService from "@/services/TokenService";
 
-async function Conexao(verbo: string, servico: string, parametros: any) {
+async function Conexao(verbo: string, servico: string, parametros: any, usaJson: boolean = true) {
     const urlempresa = location.host.replace(":3000", '');
     const url = "http://localhost:8080/api/" + servico;
     const tokenService= new TokenService();    
@@ -30,15 +30,15 @@ async function Conexao(verbo: string, servico: string, parametros: any) {
                         }).catch(err => console.log(err))
     if (respostaApi== null) return null;
     
-    if (verbo != "DEELETE"){
+    if (usaJson){
         return await respostaApi.json();        
     }
-    return true;
+    return respostaApi.text();
 }
 
 
-export async function ConexaoGET<T>(servico: string): Promise<T>{
-    return await Conexao("GET",servico,null);
+export async function ConexaoGET<T>(servico: string, usaJson: boolean = true): Promise<T>{
+    return await Conexao("GET",servico,null, usaJson);
 }
 
 export async function ConexaoPOST<T>(servico: string, parametros: any): Promise<T>{
@@ -50,5 +50,5 @@ export async function ConexaoPUT<T>(servico: string,id: String, parametros: any)
 }
 
 export async function ConexaoDELETE(servico: string,id: String){
-    await Conexao("DELETE",servico+"/"+id,null);
+    await Conexao("DELETE",servico+"/"+id,null, false);
 }

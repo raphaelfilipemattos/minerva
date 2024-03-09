@@ -1,0 +1,28 @@
+.imageuploader{
+
+}
+
+.preview{
+    border: 0.2px solid #e1d6d6;
+    padding: 1em;
+    margin: 1em;
+}
+.preview img{
+    margin: auto;
+    max-width: 20rem;
+    max-height: auto;
+    
+}
+
+.preview span{
+    font-size: 10pt;
+    margin: auto;
+    width: auto;
+    font-style: italic;
+    color: rgb(114, 114, 114);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.fileUpload{
+    
+}

@@ -16,7 +16,9 @@ import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.minerva.minerva.util.Utils;
 import jakarta.validation.Valid;
+import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -36,15 +38,7 @@ public class EmpresaService {
 
 
     private void trataLogo(String logo_base64, UUID nomeLogo){
-        byte[] data =  Base64.getDecoder().decode(logo_base64);
-        try {
-            OutputStream stream = new FileOutputStream(Ambiente.localLogoEmpresa() +nomeLogo.toString()+".png" );
-            stream.write(data);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Utils.ImageToBase64(logo_base64,Ambiente.localLogoEmpresa(),nomeLogo);
     }
 
     public EmpresaService(final EmpresaRepository empresaRepository,

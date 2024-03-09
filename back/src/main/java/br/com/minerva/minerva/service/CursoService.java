@@ -10,9 +10,14 @@ import br.com.minerva.minerva.repos.CursoRepository;
 import br.com.minerva.minerva.repos.CursoSalaRepository;
 import br.com.minerva.minerva.repos.EmpresaRepository;
 import br.com.minerva.minerva.util.NotFoundException;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.minerva.minerva.util.Utils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +74,7 @@ public class CursoService {
         mapToCategoriaMoodleModel(curso, categoriaMoodleModel);
         categoriaMoodleModel = webServiceMoodle.criaCategria(categoriaMoodleModel);
         curso.setIdcourseMoodle(Integer.toUnsignedLong(categoriaMoodleModel.getId()));
-
+        this.salveImage(cursoDTO.getImagemCapa(),curso);
         var idCurso = cursoRepository.save(curso).getIdcurso();
 
         this.salaService.criaAtualizaSala(cursoDTO, curso, this.webServiceMoodle);
@@ -80,6 +85,8 @@ public class CursoService {
         final Curso curso = cursoRepository.findById(idcurso)
                 .orElseThrow(NotFoundException::new);
         mapToEntity(cursoDTO, curso);
+        this.salveImage(cursoDTO.getImagemCapa(),curso);
+
         cursoRepository.save(curso);
         this.webServiceMoodle.setEmpresa(curso.getEmpresa());
 
@@ -105,6 +112,9 @@ public class CursoService {
         cursoDTO.setDataIni(cursoSala.getDataIni());
         cursoDTO.setDataFim(cursoSala.getDataFim());
         cursoDTO.setAtivo(curso.getAtivo());
+        if (curso.getImagemCapa() != null){
+            cursoDTO.setImagemCapa("geral/imagem/curso/"+curso.getImagemCapa().toString());
+        }
         cursoDTO.setIdempresa(curso.getEmpresa() == null ? null : curso.getEmpresa().getIdempresa());
         return cursoDTO;
     }
@@ -123,6 +133,7 @@ public class CursoService {
         curso.setApelido(cursoDTO.getApelido());
         curso.setValor(cursoDTO.getValor());
         curso.setDescricaoCompleta(cursoDTO.getDescricaoCompleta());
+
        /* final Empresa idempresa = cursoDTO.getIdempresa() == null ? null : empresaRepository.findById(cursoDTO.getIdempresa())
                 .orElseThrow(() -> new NotFoundException("idempresa not found"));
         curso.setEmpresa(idempresa);
@@ -134,6 +145,14 @@ public class CursoService {
             curso.setAtivo(cursoDTO.getAtivo());
         }
         return curso;
+    }
+
+    private void salveImage(String imageBase64, Curso curso){
+        var idImg = curso.getImagemCapa() == null ? UUID.randomUUID(): curso.getImagemCapa();
+        if (imageBase64 !=null){
+            Utils.ImageToBase64(imageBase64,Ambiente.localCapaCurso(),idImg);
+        }
+        curso.setImagemCapa(idImg);
     }
 
 }

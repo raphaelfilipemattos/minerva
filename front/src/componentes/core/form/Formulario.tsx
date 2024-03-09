@@ -32,7 +32,7 @@ export default function Formulario({objeto, descricao,
                     </div>
                     <div className={style.modal__body}>
                        {campos.map( (campo, key) =>{     
-                          campo.onChange = onChangeField;
+                          campo.onChangeField = onChangeField;
                           return campo.render(key, objeto[campo.nomeCampo])
                        })}
                     </div>

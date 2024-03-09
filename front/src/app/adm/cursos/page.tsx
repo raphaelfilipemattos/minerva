@@ -11,7 +11,7 @@ export default function AdmCursosPage(){
     useEffect(()=>{
       cursosServices.getCursos().then(data=> {
             let cursosArray = new Array<CursoModel>();
-            cursosArray = data.map(item => item as CursoModel);            
+            cursosArray = data.map(item => item as CursoModel);                        
             setCursos(cursosArray)
         });  
     },[]);
@@ -35,7 +35,7 @@ export default function AdmCursosPage(){
     camposForm.push(new CamposForm("dataIni","Data de início",true,TipoCampo.date,0,"Data que o curso irá iniciar"));
     camposForm.push(new CamposForm("dataFim","Data de encerramento",true,TipoCampo.date,0,"Data que o curso irá encerrar"));
     camposForm.push(new CamposForm("ativo","Esse curso ainda está ativo?",true,TipoCampo.boolean,0,""));
-    camposForm.push(new CamposForm("imagemCapa","Imagem para Capa",false,TipoCampo.TextArea,0,"Imagem ilustrativa do curso."));
+    camposForm.push(new CamposForm("imagemCapa","Imagem para Capa",false,TipoCampo.image,0,"Imagem ilustrativa do curso."));
    
     
     return (

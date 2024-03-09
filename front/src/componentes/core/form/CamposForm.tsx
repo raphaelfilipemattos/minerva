@@ -1,12 +1,14 @@
 import InterfaceModel from "@/models/InterfaceModel";
 import style from "./form.module.css";
+import ImageUploader from "../imageuploader/ImageUploader";
 export  enum TipoCampo{
     string,
     number,
     boolean,
     map,
     TextArea,
-    date
+    date,
+    image
 }
 
 export default class CamposForm{
@@ -52,7 +54,7 @@ export default class CamposForm{
                     name={this.nomeCampo} 
                     required={this.obrigatorio} 
                     defaultValue={valorPadrao}
-                    onChange={event => {this.onChange(event)}}
+                    onChange={event => {this.onChangeField(event)}}
                     ></textarea>)    ;
     }
 
@@ -68,6 +70,10 @@ export default class CamposForm{
                 </select>  );                
     }
 
+    private getImage(valorPadrao?: any){        
+        return (<ImageUploader imagem64={valorPadrao} nameField={this.nomeCampo}  funOnSave={this.onChangeField} />);
+    }
+
    
 
     private getInput( valorPadrao?: any){
@@ -80,7 +86,7 @@ export default class CamposForm{
                                             type= "text"
                                             maxLength={this.maxLength}
                                             defaultValue={valorPadrao}                     
-                                            onChange={event => {this.onChange(event)}} /> ),  
+                                            onChange={event => {this.onChangeField(event)}} /> ),  
             [TipoCampo.boolean]  :  (<input 
                                             className={style.input__field} 
                                             name={this.nomeCampo} 
@@ -89,14 +95,14 @@ export default class CamposForm{
                                             maxLength={this.maxLength}
                                             defaultValue={1}
                                             defaultChecked = {valorPadrao == 1}                     
-                                            onChange={event => {this.onChange(event)}} /> ),  
+                                            onChange={event => {this.onChangeField(event)}} /> ),  
             [TipoCampo.number]   :  (<input 
                                             className={style.input__field} 
                                             name={this.nomeCampo} 
                                             required={this.obrigatorio} 
                                             type= "number"
                                             defaultValue={ valorPadrao}                     
-                                            onChange={event => {this.onChange(event)}} /> ),  
+                                            onChange={event => {this.onChangeField(event)}} /> ),  
             [TipoCampo.date]     : (            
                             <input 
                                         className={style.input__field} 
@@ -104,9 +110,10 @@ export default class CamposForm{
                                         required={this.obrigatorio} 
                                         type= "date"
                                         defaultValue={ valorPadrao}                     
-                                        onChange={event => {this.onChange(event)}} /> ),
+                                        onChange={event => {this.onChangeField(event)}} /> ),
             [TipoCampo.map]      : this.getMap(valorPadrao),
-            [TipoCampo.TextArea] : this.getTextArea(valorPadrao)
+            [TipoCampo.TextArea] : this.getTextArea(valorPadrao),
+            [TipoCampo.image]    : this.getImage(valorPadrao)
         }         
         return input[this.tipoCampo];
 
@@ -124,7 +131,7 @@ export default class CamposForm{
             )
     }
 
-    onChange(event){
+    onChangeField(event){
         return event;
     }
 

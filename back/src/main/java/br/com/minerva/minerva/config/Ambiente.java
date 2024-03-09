@@ -5,13 +5,12 @@ import br.com.minerva.minerva.model.UsuarioDTO;
 import br.com.minerva.minerva.repos.EmpresaRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.HttpRequestHandler;
-import org.springframework.web.context.annotation.RequestScope;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.http.HttpRequest;
+import java.util.UUID;
+
 
 @Component
 public class Ambiente {
@@ -19,7 +18,11 @@ public class Ambiente {
     private EmpresaRepository empresaRepository;
     @Autowired
     private HttpServletRequest httpServletRequest;
-    
+
+    @Autowired
+    Environment environment;
+
+
     public static String senhaPadraoMoodle(Empresa empresa){
         return empresa.getNomeAmbiente()+"ava_M1n3rv@";
     }
@@ -82,5 +85,10 @@ public class Ambiente {
         }
         return empresa;
     }
+
+    public String getHost(){
+        return this.environment.getProperty("app.host");
+    }
+
 
 }

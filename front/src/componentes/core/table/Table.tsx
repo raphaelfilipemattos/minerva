@@ -31,7 +31,7 @@ export default function Table({htmlBeforeTable,camposListagem,camposFormulario,
     useEffect(()=> {
        ConexaoGET<Array<InterfaceModel>>(endpoint).then(data=> {
                 let tempArray = new Array<InterfaceModel>();
-                tempArray = data.map(item => item as InterfaceModel);                  
+                tempArray = data.map(item => item as InterfaceModel);                                  
                 setDados(tempArray)
             }); 
         
@@ -47,13 +47,17 @@ export default function Table({htmlBeforeTable,camposListagem,camposFormulario,
         if(resposta){
            alert("Dados salvos com sucesso!");
            window.location.reload(); 
+        }else{
+            alert("Ocorreu um erro ao gravar!");
+            console.log(resposta);  
         }
     }  
     
     async function apaga(dado){
         if (confirm("Deseja realmenet apagar esse registro?")){
             const resposta = await ConexaoDELETE(endpoint,dado[campoId]);
-            console.log(resposta);
+            alert("Registro removido!");
+            window.location.reload(); 
         }
     }    
     
