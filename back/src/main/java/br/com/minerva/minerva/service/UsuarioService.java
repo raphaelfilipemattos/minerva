@@ -1,5 +1,6 @@
 package br.com.minerva.minerva.service;
 
+import br.com.minerva.minerva.config.Ambiente;
 import br.com.minerva.minerva.domain.Empresa;
 import br.com.minerva.minerva.domain.Perfil;
 import br.com.minerva.minerva.domain.PerfilUsuarioEmpresa;
@@ -14,6 +15,8 @@ import br.com.minerva.minerva.repos.PerfilRepository;
 import br.com.minerva.minerva.repos.PerfilUsuarioEmpresaRepository;
 import br.com.minerva.minerva.repos.UsuarioRepository;
 import br.com.minerva.minerva.util.NotFoundException;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +41,9 @@ public class UsuarioService {
 
     @Autowired
     private EmpresaRepository empresaRepository;
+
+    @Autowired
+    private Ambiente ambiente;
 
     public UsuarioService(final UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
@@ -68,15 +74,23 @@ public class UsuarioService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public UUID create(@Valid final UsuarioNovoDTO usuarioDTO) {
+    public UUID create(@Valid final UsuarioNovoDTO usuarioNovoDTO) {
         final Usuario usuario = new Usuario();
-        usuarioNovoToEntity(usuarioDTO, usuario);
+        usuarioNovoToEntity(usuarioNovoDTO, usuario);
         var idusuario =  usuarioRepository.save(usuario).getIdusuario();
         if (! idusuario.toString().isEmpty()){
-            var empresa = this.empresaRepository.getReferenceById(usuarioDTO.getIdempresa());
-            if (empresa != null){
-                sincronizaMoodle(empresa,(UsuarioDTO) usuarioDTO);
-            }
+            var empresa = this.ambiente.getEmpresaAtual();
+            var usuarioDTO = new UsuarioDTO();
+
+            usuarioDTO.setIdusuario(idusuario);
+            usuarioDTO.setIdempresa(empresa.getIdempresa());
+            usuarioDTO.setCpf(usuarioNovoDTO.getCpf());
+            usuarioDTO.setEmail(usuarioNovoDTO.getEmail());
+            usuarioDTO.setNome(usuarioNovoDTO.getNome());
+            usuarioDTO.setSenha(usuarioNovoDTO.getSenha());
+
+            sincronizaMoodle(empresa,usuarioDTO);
+
         }
         return idusuario;
     }
@@ -86,13 +100,15 @@ public class UsuarioService {
                 .orElseThrow(NotFoundException::new);
         mapToEntity(usuarioDTO, usuario);
         usuarioRepository.save(usuario);
-        var empresa = this.empresaRepository.getReferenceById(IdEmpresa);
-        if (empresa != null){
-            sincronizaMoodle(empresa, usuarioDTO);
-        }
+        var empresa = this.empresaRepository.findById(IdEmpresa).get();
+        sincronizaMoodle(empresa, usuarioDTO);
+
     }
 
-    public void sincronizaMoodle(Empresa empresa, UsuarioDTO usuarioDTO){
+    public void sincronizaMoodle(Empresa empresa, UsuarioDTO usuarioDTO ){
+        this.sincronizaMoodlePerfil(empresa, usuarioDTO,Perfil.ALUNO);
+    }
+    public void sincronizaMoodlePerfil(Empresa empresa, UsuarioDTO usuarioDTO,UUID idperfil ){
         this.webServiceMoodle.setEmpresa(empresa);
         var usuarioMoodle = this.webServiceMoodle.getUsuarioByUsername(usuarioDTO.getIdusuario().toString());
         if (usuarioMoodle == null){
@@ -105,7 +121,7 @@ public class UsuarioService {
         usuarioMoodle.setFirstname(usuarioDTO.getNome());
         usuarioMoodle.setLastname(usuarioDTO.getNome());
         usuarioMoodle = this.webServiceMoodle.cria_atualiza_Usuario(usuarioMoodle);
-        this.addPerfilUsuarioEmpresa(empresa,usuarioDTO,usuarioMoodle, Perfil.ALUNO);
+        this.addPerfilUsuarioEmpresa(empresa,usuarioDTO,usuarioMoodle, idperfil);
 
     }
 
@@ -114,11 +130,11 @@ public class UsuarioService {
         if (perfilusuario == null){
             perfilusuario = new PerfilUsuarioEmpresa();
         }
-        var usuario = this.usuarioRepository.getReferenceById(usuarioDTO.getIdusuario());
+        var usuario = this.usuarioRepository.findById(usuarioDTO.getIdusuario()).get();
         perfilusuario.setEmpresa(empresa);
         perfilusuario.setIdusuarioMoodle(Integer.toUnsignedLong(usuarioMoodleModel.getId()));
         perfilusuario.setUsuario(usuario);
-        perfilusuario.setPerfil( this.perfil.getReferenceById(idperfil) );
+        perfilusuario.setPerfil( this.perfil.findById(idperfil).get() );
         this.perfilUsuarioEmpresaRepository.save(perfilusuario);
     }
 
@@ -154,7 +170,7 @@ public class UsuarioService {
         usuario.setNome(usuarioDTO.getNome());
         usuario.setEmail(usuarioDTO.getEmail());
         usuario.setCpf(usuarioDTO.getCpf());
-        usuario.setSenha(usuarioDTO.getSenha());
+        usuario.setSenha(AutentificacaoService.criptografaSenha(usuarioDTO.getSenha()));
         return usuario;
     }
     public List<PerfilDTO> getPerilEmpresa(UUID idusuario, UUID idEmpresa){

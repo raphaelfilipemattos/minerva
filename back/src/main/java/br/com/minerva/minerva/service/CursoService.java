@@ -14,6 +14,7 @@ import br.com.minerva.minerva.util.NotFoundException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,6 +71,9 @@ public class CursoService {
         this.webServiceMoodle.setEmpresa(this.ambiente.getEmpresaAtual());
         CategoriaMoodleModel categoriaMoodleModel = new CategoriaMoodleModel();
         mapToEntity(cursoDTO, curso);
+        if ( curso.getApelido().isBlank()){
+            curso.setApelido( curso.getNomeCurso().substring(1,12) );
+        }
         curso.setEmpresa(this.ambiente.getEmpresaAtual());
         mapToCategoriaMoodleModel(curso, categoriaMoodleModel);
         categoriaMoodleModel = webServiceMoodle.criaCategria(categoriaMoodleModel);
@@ -99,7 +103,11 @@ public class CursoService {
     }
 
     public void delete(final UUID idcurso) {
+        var curso = this.cursoRepository.findById(idcurso).get();
+        this.webServiceMoodle.setEmpresa(curso.getEmpresa());
+        this.webServiceMoodle.apagaCategoria(curso.getIdcourseMoodle().intValue());
         cursoRepository.deleteById(idcurso);
+
     }
 
     private CursoDTO mapToDTO(final Curso curso, final CursoDTO cursoDTO) {

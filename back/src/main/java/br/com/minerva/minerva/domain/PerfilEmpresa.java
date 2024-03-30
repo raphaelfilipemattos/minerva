@@ -35,4 +35,6 @@ public class PerfilEmpresa {
     @JoinColumn(name = "idperfil", nullable = false)
     private Perfil idperfil;
 
+
+
 }

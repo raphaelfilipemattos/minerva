@@ -52,7 +52,7 @@ public class CriaUsuarioBanco implements ICriaAmbiente{
                 " GRANT EXECUTE ON FUNCTIONS TO moodle_padrao; " +
                 " ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public " +
                 " GRANT USAGE ON TYPES TO moodle_padrao; ";
-        query.replaceAll("moodle_padrao", Ambiente.nomeBancoMoodle(empresa));
+        query = query.replaceAll("moodle_padrao", Ambiente.nomeBancoMoodle(empresa));
 
         try {
             this.jdbcTemplate.execute(query);

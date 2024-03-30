@@ -2,6 +2,7 @@ package br.com.minerva.minerva.config;
 
 import br.com.minerva.minerva.domain.Empresa;
 import br.com.minerva.minerva.model.UsuarioDTO;
+import br.com.minerva.minerva.moodle.WebServiceMoodle;
 import br.com.minerva.minerva.repos.EmpresaRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,8 +87,10 @@ public class Ambiente {
         return empresa;
     }
 
-    public String getHost(){
-        return this.environment.getProperty("app.host");
+    public  WebServiceMoodle getWebServiceMoodle(){
+         WebServiceMoodle webServiceMoodle = new WebServiceMoodle();
+         webServiceMoodle.setEmpresa(this.getEmpresaAtual());
+         return webServiceMoodle;
     }
 
 

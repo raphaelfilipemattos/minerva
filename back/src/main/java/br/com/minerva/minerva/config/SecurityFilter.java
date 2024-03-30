@@ -36,7 +36,11 @@ public class SecurityFilter extends OncePerRequestFilter {
             var tokenDepitografado = this.tokenService.decriptaToken(token);
             var idusuario = tokenDepitografado.getClaim("idusuario").asString();
             var idempresa = tokenDepitografado.getClaim("idempresa").asString();
-            var usuario =  this.usuarioRepository.findById(UUID.fromString(idusuario)).get();
+            var find =  this.usuarioRepository.findById(UUID.fromString(idusuario));
+            if (! find.isPresent()){
+                throw new RuntimeException("Usuário não encontrado");
+            }
+            var usuario = find.get();
             var usuarioDTO = new UsuarioDTO(usuario, UUID.fromString( idempresa), this.perfilUsuarioEmpresaRepository );
             var authorization = new UsernamePasswordAuthenticationToken(usuarioDTO,null, usuarioDTO.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authorization);

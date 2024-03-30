@@ -46,7 +46,7 @@ public class Utils {
         Path sourceFile = Paths.get(local, nomeArquivo.toString());
         if (! sourceFile.toFile().exists()) return "";
 
-        byte[] data = new byte[0];
+        byte[] data ;
         try {
             data = Files.readAllBytes(sourceFile.toAbsolutePath());
         } catch (IOException e) {

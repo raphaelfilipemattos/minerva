@@ -15,4 +15,13 @@ public interface PerfilRepository extends JpaRepository<Perfil, UUID> {
              where idperfil <>  br.com.minerva.minerva.domain.Perfil.ROOT
             """)
     List<Perfil> getPerfisFront();
+
+    @Query("""
+              select idperfilMoodle
+                 from PerfilEmpresa 
+                where empresa.idempresa = :idempresa
+                  and idperfil.idperfil = :idperfil 
+            """)
+
+    Integer getPerfilMoodle(UUID idempresa, UUID idperfil);
 }
