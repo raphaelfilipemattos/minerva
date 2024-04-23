@@ -3,10 +3,14 @@ import style from "./form.module.css";
 import CamposForm from "./CamposForm";
 
 export default function Formulario({objeto, descricao,  
-                                    campos,                                   
+                                    campos,   
+                                    gravaFormulario,    
+                                    tituloFormulario,                            
                                     onClose, onSubmit} : 
                              {objeto: Object|null,descricao: string, 
                               campos: Array<CamposForm>,  
+                              gravaFormulario: boolean,
+                              tituloFormulario: string,
                               onClose: (event: MouseEvent)=> void, 
                               onSubmit:(dados: Object)=> void}){
 
@@ -24,7 +28,7 @@ export default function Formulario({objeto, descricao,
             <div className={style.container}>
                 <div className={style.modal}>
                     <div className={style.modal__header}>
-                        <span className={style.modal__title}>{objeto == null ? "Novo": "Alterando "} {descricao}</span>
+                        <span className={style.modal__title}>{tituloFormulario} {descricao}</span>
                                 <button className={style.button +" "+  style.button__icon} onClick={event => { onClose(event) }}>
                                     <svg width="24" viewBox="0 0 24 24" height="24" xmlns="http://www.w3.org/2000/svg">
                                 <path fill="none" d="M0 0h24v24H0V0z"></path>
@@ -36,9 +40,11 @@ export default function Formulario({objeto, descricao,
                           return campo.render(key, objeto[campo.nomeCampo])
                        })}
                     </div>
-                    <div className={style.modal__footer+ " text-center"}>
+
+                    {gravaFormulario &&
+                     <div className={style.modal__footer+ " text-center"}>
                         <button className={style.button+' '+ style.button__primary} onClick={event => onSubmit(dadoAlterado)} >Gravar</button>
-                    </div>
+                    </div>}
                 </div>
             </div>
     );

@@ -6,9 +6,6 @@ import br.com.minerva.minerva.domain.TipoRecebimentoContrato;
 import jakarta.persistence.Lob;
 import lombok.Getter;
 import lombok.Setter;
-import org.w3c.dom.Text;
-
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -18,6 +15,7 @@ public class PropostaContratoProfessorDTO {
     private UUID id_proposta_contrato_professor;
     private UUID idprofessor;
     private UUID idempresa;
+    private UsuarioDisplayDTO professor;
 
     @Lob
     private String termos;
@@ -43,6 +41,7 @@ public class PropostaContratoProfessorDTO {
         this.setIdprofessor(propostaContratoProfessor.getProfessor().getIdusuario());
         this.setTipo_recebimento(TipoRecebimentoContrato.findByValue(propostaContratoProfessor.getTipo_recebimento()));
         this.setData_hora_criacao(propostaContratoProfessor.getData_hora_criacao());
+        this.setProfessor(new UsuarioDisplayDTO( propostaContratoProfessor.getProfessor() ) );
     }
 
     public PropostaContratoProfessorDTO( UUID id_proposta_contrato_professor, UUID idprofessor,
@@ -60,6 +59,7 @@ public class PropostaContratoProfessorDTO {
         this.setTipo_recebimento(tipo_recebimento);
         this.setValor(valor);
         this.setRespostarecusa(respostarecusa);
+
     }
 
 

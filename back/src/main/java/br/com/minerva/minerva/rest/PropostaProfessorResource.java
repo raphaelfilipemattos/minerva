@@ -65,29 +65,6 @@ public class PropostaProfessorResource {
 
     }
 
-    @PutMapping("/recusa/{idproposta}")
-    public ResponseEntity<UUID> recusaProposta(@PathVariable(name = "idproposta") final UUID idproposta,
-                                               @RequestBody @Valid final PropostaContratoProfessorDTO propostaContratoProfessorDTO ) {
-
-        var resposta = propostaProfessorService.recusaProposta(idproposta, propostaContratoProfessorDTO);
-        if (resposta.getHttpStatus() == HttpStatus.OK.value() ){
-            return ResponseEntity.ok(idproposta);
-        }
-        throw new RuntimeException(resposta.getMessage());
-
-    }
-
-    @PutMapping("/aceitar/{idproposta}")
-    public ResponseEntity<UUID> recusaProposta(@PathVariable(name = "idproposta") final UUID idproposta,
-                                               @RequestBody @Valid final CursoDTO cursoDTO ) {
-
-        var resposta = propostaProfessorService.aceitaProposta(idproposta, cursoDTO);
-        if (resposta.getHttpStatus() == HttpStatus.OK.value() ){
-            return ResponseEntity.ok(idproposta);
-        }
-        throw new RuntimeException(resposta.getMessage());
-
-    }
 
     @DeleteMapping("/{idproposta}")
     @ApiResponse(responseCode = "204")

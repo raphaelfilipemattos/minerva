@@ -1,24 +1,46 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {ClassType, ComponentClass, ReactNode, useEffect, useState } from "react"
+import {ReactNode, useEffect, useState } from "react"
 import {faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import style from "./table.module.css"
 import Formulario from "../form/Formulario"
 import { ConexaoDELETE, ConexaoGET, ConexaoPOST, ConexaoPUT } from "@/infra/Conexao"
 import CamposForm, { TipoCampo } from "../form/CamposForm"
 import InterfaceModel from "@/models/InterfaceModel"
-import { Interface } from "readline"
 
+export interface itensAcaoRegistro{
+    titulo?: string;
+    imagem?: string;
+    verbo? : string;
+    endpoint?: string; 
+    usaIdUrl?: boolean;
+    body?: Object;
+}
+
+export interface Opcoes{
+    tituloFormulario: string;
+    gravaFormulario: boolean ;
+    itensAcaoRegistro? : itensAcaoRegistro[];
+    usaEditarRegistro: boolean;
+    usaExcluirRegistro: Boolean;
+}
+
+export class ConfiguracoesTabela implements Opcoes{
+    tituloFormulario: string = "";
+    gravaFormulario: boolean = true;
+    itensAcaoRegistro? : itensAcaoRegistro[] ;
+    usaEditarRegistro: boolean = true;
+    usaExcluirRegistro: Boolean =true;
+}
 
 export default function Table({htmlBeforeTable,camposListagem,camposFormulario, 
-                               endpoint, classModel, incluirNovoRegistro }:
+                               endpoint, classModel, incluirNovoRegistro, opcoes }:
     {   htmlBeforeTable? : ReactNode
         camposListagem: Array<CamposForm>,  
         camposFormulario: Array<CamposForm>,         
         endpoint: string,
         classModel: InterfaceModel,
-        incluirNovoRegistro: boolean,        
-        
-        
+        incluirNovoRegistro: boolean, 
+        opcoes: Opcoes,
     }
     ){
     const [modal,setModal] = useState<ReactNode | null>(null);   
@@ -26,14 +48,20 @@ export default function Table({htmlBeforeTable,camposListagem,camposFormulario,
     const novoRecord = new classModel() ;    
     const campoId = novoRecord.getCampoId();
     const descricao = novoRecord.getDescricaoTabela();
-
+    const [configuracoes,setConfiguracoes] = useState<ConfiguracoesTabela>(new ConfiguracoesTabela());
+   
     
     useEffect(()=> {
        ConexaoGET<Array<InterfaceModel>>(endpoint).then(data=> {
                 let tempArray = new Array<InterfaceModel>();
                 tempArray = data.map(item => item as InterfaceModel);                                  
                 setDados(tempArray)
-            }); 
+            });
+             
+        if (opcoes != null ){
+            setConfiguracoes(opcoes);    
+        }  
+        
         
       },[]);
   
@@ -83,23 +111,35 @@ export default function Table({htmlBeforeTable,camposListagem,camposFormulario,
         currency: 'BRL'
     });
 
+    function getDado(dado, nomeCampo: string){
+        const treeName = nomeCampo.split(".");
+        let resposta = dado[treeName[0]];
+        for(let index = 1; index < treeName.length; index ++){
+            resposta = resposta[treeName[1]];
+        }
+        return resposta;
+
+    }
+
     function getDadoFormatado(dado, campo: CamposForm){
+       const informacao = getDado(dado,campo.nomeCampo);
+
        if (campo.tipoCampo == TipoCampo.date){
-        return dataFormat.format( new Date(dado[campo.nomeCampo]+ " 00:00:00") );
+        return dataFormat.format( new Date(informacao + " 00:00:00") );
        }    
        if (campo.tipoCampo == TipoCampo.number){
-        return numericFormat.format( dado[campo.nomeCampo] );
+        return numericFormat.format( informacao  );
        }    
        if (campo.tipoCampo == TipoCampo.boolean){
-        return  dado[campo.nomeCampo] ? "Sim" : "Não" ;
+        return  informacao  ? "Sim" : "Não" ;
        }    
        if (campo.tipoCampo == TipoCampo.map){
          const valor =  campo.itens?.find(item => {
-                return item[item.getCampoId()] == dado[campo.nomeCampo];
+                return item[item.getCampoId()] == informacao ;
          });         
          return  valor == null ? "" : valor[valor?.getCampoDisplay()] ;
        }
-       return  dado[campo.nomeCampo];
+       return  informacao ;
     }
     
     return (      
@@ -114,6 +154,8 @@ export default function Table({htmlBeforeTable,camposListagem,camposFormulario,
                                             setModal(
                                                         <Formulario
                                                                 descricao={descricao}
+                                                                tituloFormulario={configuracoes.tituloFormulario == '' ? ' Novo ': configuracoes.tituloFormulario}
+                                                                gravaFormulario= {configuracoes.gravaFormulario}
                                                                 objeto={novoRecord}
                                                                 campos={camposFormulario}
                                                                 onSubmit={(dadoNovo) => { gravarNovo(dadoNovo)}}
@@ -146,26 +188,30 @@ export default function Table({htmlBeforeTable,camposListagem,camposFormulario,
                                             </td> );
                                     })}
                                     <td className={style.icons+ " d-flex justify-content-between"}>
-                                        <FontAwesomeIcon 
-                                            icon={faPenToSquare}
-                                            onClick={event => {                                            
-                                                setModal(                                              
-                                                            <Formulario
-                                                                descricao={descricao}
-                                                                objeto={dado}
-                                                                campos={camposFormulario}
-                                                                onSubmit={(dadoAlterado) => { gravarEdicao(dadoAlterado)}}
-                                                                onClose={() => {fechaModal()}}
-                                                            />)
-                                                    }
-                                                }/>
-                                        <FontAwesomeIcon 
+                                        {configuracoes.usaEditarRegistro && 
+                                            <FontAwesomeIcon 
+                                                icon={faPenToSquare}
+                                                onClick={event => {                                            
+                                                    setModal(                                              
+                                                                <Formulario                                                                
+                                                                    descricao={descricao}
+                                                                    objeto={dado}
+                                                                    campos={camposFormulario}
+                                                                    gravaFormulario= {configuracoes.gravaFormulario}
+                                                                    tituloFormulario={configuracoes.tituloFormulario == '' ? ' Alterando ': configuracoes.tituloFormulario}
+                                                                    onSubmit={(dadoAlterado) => { gravarEdicao(dadoAlterado)}}
+                                                                    onClose={() => {fechaModal()}}
+                                                                />)
+                                                        }
+                                                    }/>}
+                                       {configuracoes.usaExcluirRegistro &&
+                                          <FontAwesomeIcon 
                                             icon={faTrashCan }                                                                                
                                             onClick={event => {
                                                     apaga(dado);
                                                 }
                                             }
-                                            />
+                                            />}
                                     </td>
                                 </tr>)
                         } )}

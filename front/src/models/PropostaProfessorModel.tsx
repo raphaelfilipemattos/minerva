@@ -1,4 +1,5 @@
 import InterfaceModel from "./InterfaceModel";
+import { UsuarioModel } from "./UsuarioModel";
 
 class PropostaProfessorModel implements InterfaceModel {
     getCampoDisplay(): string {
@@ -17,6 +18,7 @@ class PropostaProfessorModel implements InterfaceModel {
     tipo_recebimento?:string;
     valor?: Number;
     status?: string;
+    professor?: UsuarioModel
     
     
         

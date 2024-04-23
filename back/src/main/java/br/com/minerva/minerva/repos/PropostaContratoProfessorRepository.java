@@ -17,4 +17,14 @@ public interface PropostaContratoProfessorRepository extends JpaRepository<Propo
            where p.professor.idusuario = :idprofessor 
           """)
     List<PropostaContratoProfessor> findByProfessor(UUID idprofessor);
+
+  @Query("""
+          select p
+            from PropostaContratoProfessor p
+           where p.empresa.idempresa = :idempresa 
+             and p.status != 'N'
+             order by status,  p.professor.idusuario,data_hora_criacao 
+            
+          """)
+  List<PropostaContratoProfessor> findByEmpresa(UUID idempresa);
 }

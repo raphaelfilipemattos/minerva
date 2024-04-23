@@ -18,6 +18,7 @@ export default function MenuAdm(){
                     <ItemMenu url="/adm/alunos" className="dropdown-item" > Alunos</ItemMenu>
                     <ItemMenu url="/adm/professores" className="dropdown-item" > Professores</ItemMenu>
                     <li> <hr className="divider" /></li>
+                    <ItemMenu url="/adm/propostascurso" className="dropdown-item" > Propostas de cursos </ItemMenu>
                     <ItemMenu url="/adm/pagamentos" className="dropdown-item" > Pagamentos</ItemMenu>
                     <ItemMenu url="/adm/despesas" className="dropdown-item" > Despesas</ItemMenu>
                     <li> <hr className="divider" /></li>

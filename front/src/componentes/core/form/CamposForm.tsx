@@ -158,9 +158,18 @@ export default class CamposForm{
      
     }
 
-    render(key: number,  valorPadrao?: any){        
+    render(key: number,  valorPadrao?: any){     
+       const classeTamanho ={
+              [TipoCampo.string]   :  "col-md-12",
+              [TipoCampo.boolean]  :  "col-md-3",
+              [TipoCampo.number]   :  "col-md-3",
+              [TipoCampo.date]     :  "col-md-4",
+              [TipoCampo.map]      :  "col-md-4",
+              [TipoCampo.TextArea] :  "col-md-12",
+              [TipoCampo.image]    :  "col-md-6",
+          }         
         return (
-            <div className={"col-md-12   "+ style.input} key={key}>
+            <div className={ classeTamanho[this.tipoCampo] +" m-2 "+ style.input} key={key}>
                 <label className={style.input__label}>{this.displayCampo}</label>
                 {this.getInput(valorPadrao)}
                 {this.descricao && (<p className={style.input__description}>{this.descricao}</p>)}

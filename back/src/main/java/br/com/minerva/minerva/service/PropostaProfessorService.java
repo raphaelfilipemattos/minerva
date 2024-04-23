@@ -45,6 +45,11 @@ public class PropostaProfessorService {
           return this.propostaContratoProfessorRepository.findByProfessor(idusuario).stream().map(PropostaContratoProfessorDTO::new).toList();
     }
 
+    public List<PropostaContratoProfessorDTO> getPropostasEmpresa(UUID idempresa){
+        return this.propostaContratoProfessorRepository.findByEmpresa(idempresa).stream().map(PropostaContratoProfessorDTO::new).toList();
+    }
+
+
     public UUID criaProposta(NovaPropostaContratoProfessorDTO novaPropostaContratoProfessorDTO){
         var propostaProfessor = new PropostaContratoProfessor();
         var professor = this.usuarioRepository.findById(Ambiente.getUsuarioLogado().getIdusuario()).get();
