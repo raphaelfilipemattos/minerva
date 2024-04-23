@@ -11,4 +11,10 @@ import java.util.UUID;
 
 public interface PropostaContratoProfessorRepository extends JpaRepository<PropostaContratoProfessor, UUID> {
 
+  @Query("""
+          select p
+            from PropostaContratoProfessor p
+           where p.professor.idusuario = :idprofessor 
+          """)
+    List<PropostaContratoProfessor> findByProfessor(UUID idprofessor);
 }

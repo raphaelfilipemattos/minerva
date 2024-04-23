@@ -1,5 +1,6 @@
 package br.com.minerva.minerva.rest;
 
+import br.com.minerva.minerva.config.Ambiente;
 import br.com.minerva.minerva.domain.StatusContrato;
 import br.com.minerva.minerva.model.CursoDTO;
 import br.com.minerva.minerva.model.NovaPropostaContratoProfessorDTO;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,6 +27,13 @@ public class PropostaProfessorResource {
         this.propostaProfessorService = propostaProfessorService;
     }
 
+    @GetMapping
+    @ApiResponse(responseCode = "201")
+    public ResponseEntity<List<PropostaContratoProfessorDTO>> getPropostaUsuario() {
+        var propostas = this.propostaProfessorService.getPropostaUsuario(Ambiente.getUsuarioLogado().getIdusuario());
+        return  ResponseEntity.ok(propostas);
+    }
+
     @PostMapping
     @ApiResponse(responseCode = "201")
     public ResponseEntity<UUID> criaProposta(@RequestBody @Valid final NovaPropostaContratoProfessorDTO novaPropostaContratoProfessorDTO) {
@@ -32,13 +41,14 @@ public class PropostaProfessorResource {
         return new ResponseEntity<>(createdIdcurso, HttpStatus.CREATED);
     }
 
-    @PutMapping("/altera/{idproposta}")
-    public ResponseEntity<UUID> alteraProposta(@PathVariable(name = "idproposta") final UUID idproposta,
+
+    @PutMapping("/{id_proposta_contrato_professor}")
+    public ResponseEntity<UUID> alteraProposta(@PathVariable(name = "id_proposta_contrato_professor") final UUID id_proposta_contrato_professor,
                                                @RequestBody @Valid final PropostaContratoProfessorDTO propostaContratoProfessorDTO) {
 
-       var resposta = propostaProfessorService.alteraProposta(idproposta, propostaContratoProfessorDTO);
+       var resposta = propostaProfessorService.alteraProposta(id_proposta_contrato_professor, propostaContratoProfessorDTO);
        if (resposta.getHttpStatus() == HttpStatus.OK.value() ){
-           return ResponseEntity.ok(idproposta);
+           return ResponseEntity.ok(id_proposta_contrato_professor);
        }
         throw new RuntimeException(resposta.getMessage());
 
@@ -77,6 +87,14 @@ public class PropostaProfessorResource {
         }
         throw new RuntimeException(resposta.getMessage());
 
+    }
+
+    @DeleteMapping("/{idproposta}")
+    @ApiResponse(responseCode = "204")
+    public ResponseEntity<Void> deleteproposta(
+            @PathVariable(name = "idproposta") final UUID idproposta) {
+        this.propostaProfessorService.delete(idproposta);
+        return ResponseEntity.noContent().build();
     }
 
 

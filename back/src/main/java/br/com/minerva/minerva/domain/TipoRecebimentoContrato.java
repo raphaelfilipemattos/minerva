@@ -12,4 +12,13 @@ public enum TipoRecebimentoContrato {
         return valor;
     }
 
+    public static TipoRecebimentoContrato findByValue(String label) {
+        for (TipoRecebimentoContrato e : values()) {
+            if (e.valor.equals(label)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
 }

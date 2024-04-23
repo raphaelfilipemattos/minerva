@@ -9,10 +9,19 @@ public enum StatusContrato {
 
     private final String valor;
     StatusContrato(String valorOpcao){
-        valor = valorOpcao;
+        this.valor = valorOpcao;
     }
     public String getValor(){
-        return valor;
+        return this.valor;
+    }
+
+    public static StatusContrato findByValue(String label) {
+        for (StatusContrato e : values()) {
+            if (e.valor.equals(label)) {
+                return e;
+            }
+        }
+        return null;
     }
 
 }

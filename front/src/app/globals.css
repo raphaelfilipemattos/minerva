@@ -24,3 +24,11 @@ section{
   overflow: hidden;
   margin: 3rem;
 }
+
+.ck-powered-by-balloon{
+  visibility: hidden;
+}
+
+.ck-content{
+  height: 20em;
+}

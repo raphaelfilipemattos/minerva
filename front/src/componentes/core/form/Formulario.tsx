@@ -12,7 +12,7 @@ export default function Formulario({objeto, descricao,
 
     const [dadoAlterado, setDadoAlterado] = useState<Object|null>(objeto);
     function onChangeField(event){   
-        let value = event.target.value ;
+        let value = event.target.value ;        
         if (event.target.type == "checkbox" ){
             value = event.target.value == 1;
         }
@@ -31,7 +31,7 @@ export default function Formulario({objeto, descricao,
                                 <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg></button>
                     </div>
                     <div className={style.modal__body}>
-                       {campos.map( (campo, key) =>{     
+                       {campos.map( (campo, key) =>{                               
                           campo.onChangeField = onChangeField;
                           return campo.render(key, objeto[campo.nomeCampo])
                        })}

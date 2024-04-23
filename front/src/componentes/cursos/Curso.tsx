@@ -1,10 +1,8 @@
 "use client"
 
-import CursosSerices from "@/services/CursosServices";
 import { useEffect, useState } from "react";
 import ItemCarrocel from "./ItemCarrocel";
 import style from "./curso.module.css";
-import Image from "next/image";
 import CursosServices from "@/services/CursosServices";
 
 export default function Curso(){

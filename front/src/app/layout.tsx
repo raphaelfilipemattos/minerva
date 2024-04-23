@@ -27,7 +27,12 @@ export default function RootLayout({
 
   useEffect(()=>{
       AOS.init();
+
   },[])
+
+   
+
+  
 
   return (    
     <html lang="pt-BR">

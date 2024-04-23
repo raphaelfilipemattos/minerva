@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -39,6 +40,10 @@ public class PropostaProfessorService {
 
     @Autowired
     private SalaService salaService;
+
+    public List<PropostaContratoProfessorDTO> getPropostaUsuario(UUID idusuario){
+          return this.propostaContratoProfessorRepository.findByProfessor(idusuario).stream().map(PropostaContratoProfessorDTO::new).toList();
+    }
 
     public UUID criaProposta(NovaPropostaContratoProfessorDTO novaPropostaContratoProfessorDTO){
         var propostaProfessor = new PropostaContratoProfessor();
@@ -162,6 +167,10 @@ public class PropostaProfessorService {
         resposta.setHttpStatus(HttpStatus.OK.value());
         return resposta;
 
+    }
+
+    public void delete(final UUID idproposta) {
+        this.propostaContratoProfessorRepository.deleteById(idproposta);
     }
 
 }

@@ -95,9 +95,9 @@ export default function Table({htmlBeforeTable,camposListagem,camposFormulario,
        }    
        if (campo.tipoCampo == TipoCampo.map){
          const valor =  campo.itens?.find(item => {
-                return item.getCampoId() == dado[campo.nomeCampo];
-         });
-         return valor?.getCampoDisplay();
+                return item[item.getCampoId()] == dado[campo.nomeCampo];
+         });         
+         return  valor == null ? "" : valor[valor?.getCampoDisplay()] ;
        }
        return  dado[campo.nomeCampo];
     }

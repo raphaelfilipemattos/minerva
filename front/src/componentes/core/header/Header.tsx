@@ -39,6 +39,7 @@ export default function Header(){
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <ItemMenu url="/" className="nav-link active" >Home</ItemMenu>                
                         <ItemMenu url="/cursos" className="nav-link" >Cursos</ItemMenu>
+                        <ItemMenu url="/professores" className="nav-link" >Profesores</ItemMenu>
                         <ItemMenu url="/sobre" className="nav-link" >Sobre a empresa</ItemMenu>
                         {usuarioLogado &&
                             <MenuAdm/>

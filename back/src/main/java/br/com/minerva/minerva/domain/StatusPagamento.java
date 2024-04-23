@@ -13,4 +13,13 @@ public enum StatusPagamento {
         return valor;
     }
 
+    public static StatusPagamento findByValue(String label) {
+        for (StatusPagamento e : values()) {
+            if (e.valor.equals(label)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
 }

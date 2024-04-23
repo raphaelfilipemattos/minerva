@@ -14,7 +14,10 @@ export default function LogoffPage(){
         
     },[])
 
-    return <h1>Deslogando...</h1>
-    
+    return (
+        <section>
+            <h1>Deslogando...</h1>
+        </section>
+    )
    
 } 

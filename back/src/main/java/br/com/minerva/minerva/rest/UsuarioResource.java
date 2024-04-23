@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsuarioResource {
+    @Autowired
+    private Ambiente ambiente;
 
     private final UsuarioService usuarioService;
 
@@ -39,7 +43,7 @@ public class UsuarioResource {
     }
     @GetMapping("/professores")
     public ResponseEntity<List<UsuarioDTO>> getAllProfessoresEmpresa() {
-        return ResponseEntity.ok(usuarioService.getUsuariosEmpresa(Ambiente.getUsuarioLogado().getIdempresa(), Perfil.PROFESSOR) );
+        return ResponseEntity.ok(usuarioService.getUsuariosEmpresa(this.ambiente.getEmpresaAtual().getIdempresa(), Perfil.PROFESSOR) );
     }
 
     @GetMapping("/alunos")
