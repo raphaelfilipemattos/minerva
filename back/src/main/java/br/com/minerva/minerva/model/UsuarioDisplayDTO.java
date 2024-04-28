@@ -38,5 +38,12 @@ public class UsuarioDisplayDTO {
         this.setCpf(usuario.getCpf());
     }
 
+    public UsuarioDisplayDTO(UsuarioDTO usuario){
+        this.setIdusuario(usuario.getIdusuario());
+        this.setNome(usuario.getNome());
+        this.setEmail(usuario.getEmail());
+        this.setCpf(usuario.getCpf());
+    }
+
 
 }

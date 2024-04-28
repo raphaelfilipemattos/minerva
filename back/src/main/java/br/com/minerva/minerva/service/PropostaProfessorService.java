@@ -122,7 +122,7 @@ public class PropostaProfessorService {
 
         propostaProfessor.setUsuariorecusa(usuarioRecusa);
         propostaProfessor.setRespostarecusa(propostaContratoProfessorDTO.getRespostarecusa());
-        propostaProfessor.setStatus(propostaContratoProfessorDTO.getStatus().getValor());
+        propostaProfessor.setStatus(StatusContrato.NAO_ACEITO.getValor());
         this.propostaContratoProfessorRepository.save(propostaProfessor);
         resposta.setHttpStatus(HttpStatus.OK.value());
         return resposta;

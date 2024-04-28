@@ -54,7 +54,7 @@ public class PropostaProfessorResource {
 
     }
 
-    @PutMapping("/envia/{idproposta}")
+    @GetMapping("/envia/{idproposta}")
     public ResponseEntity<UUID> enviaProposta(@PathVariable(name = "idproposta") final UUID idproposta) {
 
         var resposta = propostaProfessorService.enviaProposta(idproposta);

@@ -3,6 +3,7 @@ package br.com.minerva.minerva.model;
 import br.com.minerva.minerva.domain.PropostaContratoProfessor;
 import br.com.minerva.minerva.domain.StatusContrato;
 import br.com.minerva.minerva.domain.TipoRecebimentoContrato;
+import br.com.minerva.minerva.domain.Usuario;
 import jakarta.persistence.Lob;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,11 +45,11 @@ public class PropostaContratoProfessorDTO {
         this.setProfessor(new UsuarioDisplayDTO( propostaContratoProfessor.getProfessor() ) );
     }
 
-    public PropostaContratoProfessorDTO( UUID id_proposta_contrato_professor, UUID idprofessor,
-                                         UUID idempresa, String termos,String assunto,
-                                         LocalDateTime data_hora_criacao, StatusContrato status,
-                                         TipoRecebimentoContrato tipo_recebimento,float valor,
-                                         String respostarecusa){
+    public PropostaContratoProfessorDTO(UUID id_proposta_contrato_professor, UUID idprofessor,
+                                        UUID idempresa, String termos, String assunto,
+                                        LocalDateTime data_hora_criacao, StatusContrato status,
+                                        TipoRecebimentoContrato tipo_recebimento, float valor,
+                                        String respostarecusa, Usuario professor){
         this.setId_proposta_contrato_professor(id_proposta_contrato_professor);
         this.setIdprofessor(idprofessor);
         this.setIdempresa(idempresa);
@@ -59,6 +60,7 @@ public class PropostaContratoProfessorDTO {
         this.setTipo_recebimento(tipo_recebimento);
         this.setValor(valor);
         this.setRespostarecusa(respostarecusa);
+        this.setProfessor(new UsuarioDisplayDTO( professor ) );
 
     }
 

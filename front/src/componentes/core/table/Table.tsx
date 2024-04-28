@@ -6,20 +6,13 @@ import Formulario from "../form/Formulario"
 import { ConexaoDELETE, ConexaoGET, ConexaoPOST, ConexaoPUT } from "@/infra/Conexao"
 import CamposForm, { TipoCampo } from "../form/CamposForm"
 import InterfaceModel from "@/models/InterfaceModel"
+import ItensAcaoRegistro from "./ItemAcaoRegistro"
 
-export interface itensAcaoRegistro{
-    titulo?: string;
-    imagem?: string;
-    verbo? : string;
-    endpoint?: string; 
-    usaIdUrl?: boolean;
-    body?: Object;
-}
 
 export interface Opcoes{
     tituloFormulario: string;
     gravaFormulario: boolean ;
-    itensAcaoRegistro? : itensAcaoRegistro[];
+    itensAcaoRegistro? : ItensAcaoRegistro[];
     usaEditarRegistro: boolean;
     usaExcluirRegistro: Boolean;
 }
@@ -27,7 +20,7 @@ export interface Opcoes{
 export class ConfiguracoesTabela implements Opcoes{
     tituloFormulario: string = "";
     gravaFormulario: boolean = true;
-    itensAcaoRegistro? : itensAcaoRegistro[] ;
+    itensAcaoRegistro? : ItensAcaoRegistro[] ;
     usaEditarRegistro: boolean = true;
     usaExcluirRegistro: Boolean =true;
 }
@@ -107,8 +100,11 @@ export default function Table({htmlBeforeTable,camposListagem,camposFormulario,
     });
 
     const numericFormat = new Intl.NumberFormat('pt-BR', {
-        style: 'currency', 
-        currency: 'BRL'
+        style: 'decimal',        
+        roundingPriority: "lessPrecision",
+        minimumFractionDigits: 2,
+        minimumSignificantDigits: 2,
+
     });
 
     function getDado(dado, nomeCampo: string){
@@ -181,16 +177,18 @@ export default function Table({htmlBeforeTable,camposListagem,camposFormulario,
                         {dados && dados.map( (dado, key) => {
                         return (
                                 <tr key={key}>
-                                    <td className="text-center">{key+1}</td>
+                                    <td className="text-center" key={key+"_num_0"} >{key+1}</td>
                                     {camposListagem.map((campo, keyCampo)=> {
-                                        return (<td key={keyCampo}>                                                
+                                        return (<td key={key+'_'+campo.nomeCampo+"_"+keyCampo+1}>                                                
                                                     { getDadoFormatado(dado, campo)} 
                                             </td> );
                                     })}
-                                    <td className={style.icons+ " d-flex justify-content-between"}>
+                                    <td className={style.icons+ " d-flex justify-content-between"} key={key+"_acao_9999"}  >
                                         {configuracoes.usaEditarRegistro && 
                                             <FontAwesomeIcon 
                                                 icon={faPenToSquare}
+                                                key={key+"_acao_editar"}
+                                                title="Editar"
                                                 onClick={event => {                                            
                                                     setModal(                                              
                                                                 <Formulario                                                                
@@ -206,12 +204,20 @@ export default function Table({htmlBeforeTable,camposListagem,camposFormulario,
                                                     }/>}
                                        {configuracoes.usaExcluirRegistro &&
                                           <FontAwesomeIcon 
-                                            icon={faTrashCan }                                                                                
+                                            icon={faTrashCan }  
+                                            key={key+"_acao_apagar"}
+                                            title="Apagar"                                                                              
                                             onClick={event => {
                                                     apaga(dado);
                                                 }
                                             }
                                             />}
+                                        {
+                                            configuracoes.itensAcaoRegistro && 
+                                            configuracoes.itensAcaoRegistro.map((acao, keyItens) =>{                                                
+                                                return acao.render(dado, campoId, key+"_acao_extra"+keyItens);
+                                            })
+                                        }    
                                     </td>
                                 </tr>)
                         } )}

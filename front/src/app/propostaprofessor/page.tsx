@@ -1,7 +1,8 @@
 "use client"
 
 import CamposForm, { TipoCampo } from "@/componentes/core/form/CamposForm";
-import Table from "@/componentes/core/table/Table";
+import ItensAcaoRegistro from "@/componentes/core/table/ItemAcaoRegistro";
+import Table, { ConfiguracoesTabela } from "@/componentes/core/table/Table";
 import PropostaProfessorModel from "@/models/PropostaProfessorModel";
 import TipoPagamentoPropostaModel from "@/models/TipoPagamentoPropostaModel";
 import TokenService from "@/services/TokenService";
@@ -37,8 +38,21 @@ export default function PropostaProfessorPage(){
     camposForm.push(new CamposForm("tipo_recebimento","Como gostaria de receber?",true,TipoCampo.map,0,"Valor fixo ou uma porcentagem da venda do curso",formaRecebimento   ));
     camposForm.push(new CamposForm("valor","Valor",true,TipoCampo.number,0,"Valor/porcentagem que gostaria de receber"));
     camposForm.push(new CamposForm("termos","Termos",true,TipoCampo.TextArea,0,"Seus termos"));
+    
+    const btnEnviar = new ItensAcaoRegistro();
 
-   
+    btnEnviar.endpoint = "propostaprofessor/envia";
+    btnEnviar.verbo = "GET";
+    btnEnviar.titulo = "Enviar proposta";
+    btnEnviar.usaIdUrl = true;
+    btnEnviar.msgConfirma = "Deseja relamente enviar essa proposta?";
+    btnEnviar.imagem =  ['far','paper-plane'];
+    btnEnviar.onShow =  (dado) => {
+         return dado.status == 'NAO_ENVIADO';
+    }
+ 
+    const configuracoes = new ConfiguracoesTabela();
+    configuracoes.itensAcaoRegistro = [btnEnviar]
 
      return(
         <section>
@@ -53,6 +67,7 @@ export default function PropostaProfessorPage(){
                         endpoint={"propostaprofessor"} 
                         classModel={PropostaProfessorModel}              
                         incluirNovoRegistro={true}
+                        opcoes={configuracoes}
                        
                         
                     />
