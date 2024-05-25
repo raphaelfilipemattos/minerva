@@ -10,6 +10,9 @@ import LoginModel from "@/models/LoginModel";
 import TokenService from "@/services/TokenService";
 import PerfilModel from "@/models/PerfilModel";
 import MenuAdm from "./MenuAdm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAddressCard, faCircleUser } from "@fortawesome/free-regular-svg-icons";
+import AvaBtn from "@/componentes/ava/AvaBtn";
 
 
 export default function Header(){
@@ -45,12 +48,15 @@ export default function Header(){
                             <MenuAdm/>
                         }
                         {usuarioLogado &&
-                                <ItemMenu url="#"  className="nav-link" >Sala de aula</ItemMenu>                            
+                                <ItemMenu url="#"  className="nav-link" >
+                                    <AvaBtn />
+                                </ItemMenu>                            
                         }                        
                     </ul>
                     {! usuarioLogado &&
                         <ul className="navbar-nav me-4 mb-2 mb-lg-0">
-                            <ItemMenu url="/login" className="nav-link" >Área restrita</ItemMenu>
+                            <ItemMenu url="/criarconta" className="nav-link" ><FontAwesomeIcon icon={faCircleUser}/>  Criar conta</ItemMenu>
+                            <ItemMenu url="/login" className="nav-link" > <FontAwesomeIcon icon={faAddressCard}/> Entrar</ItemMenu>
                         </ul>
                     }
                     {usuarioLogado &&

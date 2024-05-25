@@ -5,6 +5,7 @@ import br.com.minerva.minerva.domain.Empresa;
 import br.com.minerva.minerva.domain.Perfil;
 import br.com.minerva.minerva.domain.PerfilUsuarioEmpresa;
 import br.com.minerva.minerva.domain.Usuario;
+import br.com.minerva.minerva.model.LoginAvaDTO;
 import br.com.minerva.minerva.model.PerfilDTO;
 import br.com.minerva.minerva.model.UsuarioDTO;
 import br.com.minerva.minerva.model.UsuarioNovoDTO;
@@ -77,6 +78,7 @@ public class UsuarioService {
     public UUID create(@Valid final UsuarioNovoDTO usuarioNovoDTO) {
         final Usuario usuario = new Usuario();
         usuarioNovoToEntity(usuarioNovoDTO, usuario);
+        usuario.setSenha(AutentificacaoService.criptografaSenha(usuarioNovoDTO.getSenha()));
         var idusuario =  usuarioRepository.save(usuario).getIdusuario();
         if (! idusuario.toString().isEmpty()){
             var empresa = this.ambiente.getEmpresaAtual();
@@ -87,8 +89,6 @@ public class UsuarioService {
             usuarioDTO.setCpf(usuarioNovoDTO.getCpf());
             usuarioDTO.setEmail(usuarioNovoDTO.getEmail());
             usuarioDTO.setNome(usuarioNovoDTO.getNome());
-            usuarioDTO.setSenha(usuarioNovoDTO.getSenha());
-
             sincronizaMoodle(empresa,usuarioDTO);
 
         }
@@ -120,6 +120,7 @@ public class UsuarioService {
         usuarioMoodle.setEmail(usuarioDTO.getEmail());
         usuarioMoodle.setFirstname(usuarioDTO.getNome());
         usuarioMoodle.setLastname(usuarioDTO.getNome());
+        usuarioMoodle.setPassword(LoginAvaDTO.geraSenhaAva(usuarioDTO)  );
         usuarioMoodle = this.webServiceMoodle.cria_atualiza_Usuario(usuarioMoodle);
         this.addPerfilUsuarioEmpresa(empresa,usuarioDTO,usuarioMoodle, idperfil);
 
@@ -170,7 +171,7 @@ public class UsuarioService {
         usuario.setNome(usuarioDTO.getNome());
         usuario.setEmail(usuarioDTO.getEmail());
         usuario.setCpf(usuarioDTO.getCpf());
-        usuario.setSenha(AutentificacaoService.criptografaSenha(usuarioDTO.getSenha()));
+
         return usuario;
     }
     public List<PerfilDTO> getPerilEmpresa(UUID idusuario, UUID idEmpresa){

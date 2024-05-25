@@ -1,7 +1,8 @@
 package br.com.minerva.minerva.rest;
 
 import br.com.minerva.minerva.config.Ambiente;
-import br.com.minerva.minerva.domain.Perfil;
+import br.com.minerva.minerva.model.LoginAvaDTO;
+
 import br.com.minerva.minerva.model.PerfilDTO;
 import br.com.minerva.minerva.model.UsuarioDTO;
 import br.com.minerva.minerva.repos.PerfilRepository;
@@ -52,6 +53,15 @@ public class GeralResource {
 
         return ResponseEntity.ok("data:image/png;base64, "+resposta );
 
+    }
+
+    @GetMapping("/loginava")
+    public ResponseEntity<LoginAvaDTO> getDadosLoginAva(){
+        var loginava = new LoginAvaDTO();
+        loginava.setLogin(Ambiente.getUsuarioLogado().getIdusuario().toString());
+        loginava.setSenha( LoginAvaDTO.geraSenhaAva(Ambiente.getUsuarioLogado()) );
+        loginava.setUrl( this.ambiente.getEmpresaAtual().getDominioava() );
+        return ResponseEntity.ok(loginava);
     }
 
 }

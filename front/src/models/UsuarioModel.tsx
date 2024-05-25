@@ -19,5 +19,6 @@ export class UsuarioModel implements InterfaceModel{
 	idusuario?: UUID;	
 	dataCadastro?: Date;
 	perfil?: UUID;
+    senha?: string;
 	
 }
