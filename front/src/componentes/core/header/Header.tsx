@@ -13,6 +13,7 @@ import MenuAdm from "./MenuAdm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAddressCard, faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import AvaBtn from "@/componentes/ava/AvaBtn";
+import Carrinho from "@/componentes/carrinho/Carrinho";
 
 
 export default function Header(){
@@ -64,6 +65,8 @@ export default function Header(){
                     {usuarioLogado &&
                       <MenuUsuario/>
                     }
+
+                    <Carrinho/>
 
                 
                 </div>

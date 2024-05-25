@@ -1,0 +1,26 @@
+.img_carrinho svg{
+    width: 32px;
+    height: 24px;
+}
+
+.lista_cursos{
+    position: absolute;
+    top: 4rem;
+    left: calc(98% - 21rem);
+    z-index: 9999;
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+    width: 20rem;
+    height: 80vh;
+    padding: 1rem;
+    box-shadow: -5px 5px 6px 5px #3e3c3c;
+}
+
+.remover_curso{
+    color: red;
+    padding: 0.5em;
+    font-size: 14pt;
+    cursor: pointer;
+}

@@ -2,16 +2,25 @@
 import Image from "next/image";
 import { redirect, useSearchParams } from "next/navigation";
 import style from "./curso.module.css";
+import CarrinhoService from "@/services/CarrinhoService";
+import CursoModel from "@/models/CursoModel";
 
 
 
 
 export default function DetalhesCurso(){
+    const carrinhoService = new CarrinhoService();
+    
     const query = useSearchParams().get("curso")
     if ( query == undefined ){
-     return redirect("/");
-   }   
-   const curso = JSON.parse(query)
+        return redirect("/");
+    }   
+    
+    const curso = JSON.parse(query) as CursoModel;
+    
+    function addCarrinho(){
+      carrinhoService.addCurso(curso)
+    }
 
    return (
             <section id="course-details" className={style.courseDetails}>
@@ -36,7 +45,7 @@ export default function DetalhesCurso(){
                                 <p> R$ {Number.parseFloat(curso.valor).toLocaleString("pt-BR") }</p>
                             </div>
                             <div className={style.course_info+ " d-flex justify-content-center align-items-center"}>
-                                <button type="button" className="btn btn-success">Inscrever</button>
+                                <button type="button" className="btn btn-success" onClick={addCarrinho}>Adionar no carrinho</button>
                             </div>
                         </div>
                     </div>

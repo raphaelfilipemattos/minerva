@@ -21,21 +21,15 @@ export default function Curso(){
         cursos &&
         <section id="cursos" className={style.curso} data-aos="zoom-in-up" data-aos-easing="linear"  data-aos-duration="1500">
             <div className="container" >
-
                 <div className="section-title">
-                    <p>Nossos Cursos</p>                    
+                    <p>Nossos Cursos</p>
                 </div>
-
                 <div className="row" >
                      {cursos.map((curso,index) =>(
                              <ItemCarrocel key={index} curso={curso} indexItem={index} />
-                           ))}
-
-                   
-                          
-                        </div>               
-                    
-
+                           ))
+                    }
+                   </div>
              </div>
         </section>
     );
