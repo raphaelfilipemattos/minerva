@@ -4,8 +4,11 @@ import { useEffect, useState } from "react";
 import Table from "@/componentes/core/table/Table";
 import CamposForm, { TipoCampo } from "@/componentes/core/form/CamposForm";
 import CursoModel from "@/models/CursoModel";
+import AdmPages from "../AdmPages";
 
 export default function AdmCursosPage(){
+    AdmPages();
+
     const [cursos, setCursos] =  useState<Array<CursoModel>>();    
     const cursosServices = new CursosServices();
     useEffect(()=>{

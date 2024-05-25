@@ -7,11 +7,16 @@ import Table, { ConfiguracoesTabela, itensAcaoRegistro } from "@/componentes/cor
 import CursoModel from "@/models/CursoModel";
 import PropostaProfessorModel from "@/models/PropostaProfessorModel";
 import TipoPagamentoPropostaModel from "@/models/TipoPagamentoPropostaModel";
+import TokenService from "@/services/TokenService";
 import { faCircleCheck, faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
 import { ReactNode, useState } from "react";
+import AdmPages from "../AdmPages";
 
 export default function PropostaProfessorPage(){
     
+    AdmPages();
+
+    const tokenService = new TokenService();
     const camposListagem = new Array<CamposForm>;
     const camposForm = new Array<CamposForm>;
     const formaRecebimento = new Array<TipoPagamentoPropostaModel>;

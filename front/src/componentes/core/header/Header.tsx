@@ -46,13 +46,15 @@ export default function Header(){
                         <ItemMenu url="/sobre" className="nav-link" >Sobre a empresa</ItemMenu>
                         {usuarioLogado &&
                             <MenuAdm/>
-                        }
-                        {usuarioLogado &&
-                                <ItemMenu url="#"  className="nav-link" >
-                                    <AvaBtn />
-                                </ItemMenu>                            
-                        }                        
+                        }                                      
                     </ul>
+                    
+                    {usuarioLogado &&
+                        <ul className="navbar-nav me-4 mb-2 mb-lg-0">
+                            <AvaBtn />
+                        </ul>
+                    }        
+
                     {! usuarioLogado &&
                         <ul className="navbar-nav me-4 mb-2 mb-lg-0">
                             <ItemMenu url="/criarconta" className="nav-link" ><FontAwesomeIcon icon={faCircleUser}/>  Criar conta</ItemMenu>

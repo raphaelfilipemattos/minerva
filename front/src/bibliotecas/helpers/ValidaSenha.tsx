@@ -19,7 +19,7 @@ export class ValidadorSenha
         const specialCharRegex = /[^A-Za-z0-9]/;
     
         let isValid = new ValidacaoSenha();
-        console.log(password);
+        
         if (password == undefined) return isValid;
 
         isValid = {...isValid, 

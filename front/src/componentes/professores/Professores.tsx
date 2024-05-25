@@ -10,8 +10,7 @@ export default function Professores(){
   const [professores, setProfessores] = useState<Array<ProfessorModel>>(); 
 
   useEffect(()=>{
-     ConexaoGET<Array<ProfessorModel>>("usuarios/professores").then(data => {
-        console.log(data)
+     ConexaoGET<Array<ProfessorModel>>("usuarios/professores").then(data => {        
         let professoresArray = new Array<ProfessorModel>();
         professoresArray = data.map(item => item as ProfessorModel);            
         setProfessores(professoresArray);

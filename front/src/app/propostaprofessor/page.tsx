@@ -7,9 +7,13 @@ import PropostaProfessorModel from "@/models/PropostaProfessorModel";
 import TipoPagamentoPropostaModel from "@/models/TipoPagamentoPropostaModel";
 import TokenService from "@/services/TokenService";
 import { useEffect, useState } from "react";
+import AdmPages from "../adm/AdmPages";
 
 export default function PropostaProfessorPage(){
+     AdmPages();
+
      const tokenService = new TokenService();
+  
      const camposListagem = new Array<CamposForm>;
      const camposForm = new Array<CamposForm>;
      const formaRecebimento = new Array<TipoPagamentoPropostaModel>;
@@ -25,6 +29,8 @@ export default function PropostaProfessorPage(){
         }
 
     },[] );
+
+
     
     formaRecebimento.push( new TipoPagamentoPropostaModel("VALOR","$") );
     formaRecebimento.push( new TipoPagamentoPropostaModel("PORCENTAGEM","%") );

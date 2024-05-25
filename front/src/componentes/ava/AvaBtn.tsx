@@ -32,7 +32,7 @@ export default function AvaBtn(){
                     <input type="hidden" name="logintoken" defaultValue={ logintoken.toString().replaceAll('-','')}></input>
                     <input type="hidden"   name="username" id="username"  defaultValue={dadosAva.login} />
                     <input type="hidden"   name="password" id="password"  defaultValue={dadosAva.senha} />
-                    <a onClick={submit}>Sala de aula</a>
+                    <input type="submit" className="btn btn-outline-dark" onClick={submit} value={"Sala de aula"} />
                </form> 
             
             }
