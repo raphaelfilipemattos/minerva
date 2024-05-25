@@ -13,6 +13,7 @@ export default function Curso(){
             let cursosArray = new Array<CursoModel>();
             cursosArray = data.map(item => item as CursoModel);            
             setCursos(cursosArray);
+            localStorage.setItem("cursos", JSON.stringify(cursosArray))
         })
         
     },[]);

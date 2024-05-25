@@ -4,20 +4,32 @@ import { redirect, useSearchParams } from "next/navigation";
 import style from "./curso.module.css";
 import CarrinhoService from "@/services/CarrinhoService";
 import CursoModel from "@/models/CursoModel";
+import { useState } from "react";
+import { ConexaoGET } from "@/infra/Conexao";
 
 
 
 
 export default function DetalhesCurso(){
+    const [imagem, setImagem] = useState<string>("/img/curso.jpg");
     const carrinhoService = new CarrinhoService();
     
-    const query = useSearchParams().get("curso")
-    if ( query == undefined ){
+    const hash = useSearchParams().get("hash")
+    
+    if ( hash == undefined ){
         return redirect("/");
     }   
-    
-    const curso = JSON.parse(query) as CursoModel;
-    
+    const cursos =  JSON.parse(localStorage.getItem("cursos"));
+    const curso = cursos.filter(item=> item.idcurso == hash)[0] as CursoModel;
+    if (curso == null){
+        return redirect("/");
+    }
+
+    if (curso.imagemCapa != null ){
+        ConexaoGET<string>(curso.imagemCapa,false).then(image64 => {
+                setImagem(image64);
+            })
+    }    
     function addCarrinho(){
       carrinhoService.addCurso(curso)
     }
@@ -28,7 +40,7 @@ export default function DetalhesCurso(){
                     <div className="row">
                         <div className="col-lg-8">
                             <Image 
-                                src="/img/curso.jpg" 
+                                src={imagem} 
                                 className="img-fluid" 
                                 alt=""
                                 width={500}

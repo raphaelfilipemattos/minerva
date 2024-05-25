@@ -33,7 +33,9 @@ export default function ItemCarrocel({curso,indexItem} : {curso: CursoModel,inde
                         <Link
                           href={{
                              pathname: "detalhescurso",
-                             query: {"curso": JSON.stringify(curso)}
+                             query: {"curso": curso.nomeCurso,
+                                     "hash": curso.idcurso 
+                              }
                           }}>
                             {curso.nomeCurso}
                         </Link>    
