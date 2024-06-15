@@ -89,6 +89,7 @@ export default function CriarConta(){
                        required={true} 
                        className={style.input} 
                        onChange={onChange}
+                       autoFocus
                        />
                 <label htmlFor="cpf" className={style.label} >CPF</label>
                 <input type="text" 

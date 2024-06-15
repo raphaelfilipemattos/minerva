@@ -7,10 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,21 +32,21 @@ public class Inscricao {
     @Column(nullable = false)
     private LocalTime hora;
 
-    @Column(nullable = false)
+    @Column(nullable = false,insertable = false)
     private Long seq;
 
-    @Column(nullable = false, unique = true, length = 10)
-    private String identificador;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idcurso_id", nullable = false)
+    @JoinColumn(name = "idcurso", nullable = false)
     private Curso idcurso;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idusuario_id", nullable = false)
+    @JoinColumn(name = "idusuario", nullable = false)
     private Usuario idusuario;
 
-    @OneToMany(mappedBy = "idinscricao")
-    private Set<Pagamento> idinscricaoPagamentoes;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idpagamentocurso", nullable = false)
+    private Pagamentocurso idpagamentocurso;
+
 
 }

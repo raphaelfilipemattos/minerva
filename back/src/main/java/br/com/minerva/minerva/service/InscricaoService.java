@@ -6,10 +6,13 @@ import br.com.minerva.minerva.domain.Usuario;
 import br.com.minerva.minerva.model.InscricaoDTO;
 import br.com.minerva.minerva.repos.CursoRepository;
 import br.com.minerva.minerva.repos.InscricaoRepository;
+import br.com.minerva.minerva.repos.PagamentoCursoRepository;
 import br.com.minerva.minerva.repos.UsuarioRepository;
 import br.com.minerva.minerva.util.NotFoundException;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,8 @@ public class InscricaoService {
     private final InscricaoRepository inscricaoRepository;
     private final CursoRepository cursoRepository;
     private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private PagamentoCursoRepository pagamentoCursoRepository;
 
     public InscricaoService(final InscricaoRepository inscricaoRepository,
             final CursoRepository cursoRepository, final UsuarioRepository usuarioRepository) {
@@ -63,7 +68,6 @@ public class InscricaoService {
         inscricaoDTO.setData(inscricao.getData());
         inscricaoDTO.setHora(inscricao.getHora());
         inscricaoDTO.setSeq(inscricao.getSeq());
-        inscricaoDTO.setIdentificador(inscricao.getIdentificador());
         inscricaoDTO.setIdcurso(inscricao.getIdcurso() == null ? null : inscricao.getIdcurso().getIdcurso());
         inscricaoDTO.setIdusuario(inscricao.getIdusuario() == null ? null : inscricao.getIdusuario().getIdusuario());
         return inscricaoDTO;
@@ -73,18 +77,14 @@ public class InscricaoService {
         inscricao.setData(inscricaoDTO.getData());
         inscricao.setHora(inscricaoDTO.getHora());
         inscricao.setSeq(inscricaoDTO.getSeq());
-        inscricao.setIdentificador(inscricaoDTO.getIdentificador());
         final Curso idcurso = inscricaoDTO.getIdcurso() == null ? null : cursoRepository.findById(inscricaoDTO.getIdcurso())
                 .orElseThrow(() -> new NotFoundException("idcurso not found"));
         inscricao.setIdcurso(idcurso);
         final Usuario idusuario = inscricaoDTO.getIdusuario() == null ? null : usuarioRepository.findById(inscricaoDTO.getIdusuario())
                 .orElseThrow(() -> new NotFoundException("idusuario not found"));
         inscricao.setIdusuario(idusuario);
+        inscricao.setIdpagamentocurso( pagamentoCursoRepository.findById( inscricaoDTO.getIdpagamentocurso() ).get() );
         return inscricao;
-    }
-
-    public boolean identificadorExists(final String identificador) {
-        return inscricaoRepository.existsByIdentificadorIgnoreCase(identificador);
     }
 
 }

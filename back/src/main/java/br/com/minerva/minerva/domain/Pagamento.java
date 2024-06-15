@@ -7,8 +7,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.Getter;
@@ -27,24 +29,30 @@ public class Pagamento {
     @GeneratedValue(generator = "uuid")
     private UUID idpagamento;
 
-    @Column(nullable = false, precision = 8, scale = 2)
-    private BigDecimal valor;
+    @Column(nullable = false, precision = 8)
+    private Double valor;
 
-    @Column(nullable = false, precision = 8, scale = 2)
-    private BigDecimal valorPago;
+    @Column(nullable = false, precision = 8)
+    private Double valorPago;
+
+    @Column(nullable = false, precision = 8)
+    private Double valor_desconto;
 
     @Column(nullable = false)
     private LocalDate data;
 
     @Column
-    private OffsetDateTime hora;
+    private LocalTime hora;
+
+    @Column(nullable = false)
+    private String identificador;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idforma_pagamento_id", nullable = false)
+    @JoinColumn(name = "idforma_pagamento", nullable = false)
     private FormaPagamento idformaPagamento;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idinscricao_id", nullable = false)
-    private Inscricao idinscricao;
+    @JoinColumn(name = "idusuario", nullable = false)
+    private Usuario idusuario;
 
 }

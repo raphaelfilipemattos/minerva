@@ -22,7 +22,10 @@ async function Conexao(verbo: string, servico: string, parametros: any, usaJson:
                             mode: "cors", 
                             cache: 'no-cache',
                             body: parametros
-                        }).then(respostaApi =>{                                     
+                        }).then(respostaApi =>{   
+                            if (respostaApi.status == 403){
+                                location.href = location.origin+'/logoff';
+                            }                                  
                             if (!respostaApi.ok) {
                                 throw new Error(`Erro na solicitação: ${respostaApi.statusText}`);
                             }

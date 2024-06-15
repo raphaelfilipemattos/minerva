@@ -65,7 +65,7 @@ export default function Login(){
             </button>
             <p className={style.p}>
                  Ainda não tem uma conta? 
-                 <span className={style.span}>Cadastre-se agora</span>
+                 <a href="/criarconta" className={style.span}>Cadastre-se agora</a>
             </p>
         </form>
     )

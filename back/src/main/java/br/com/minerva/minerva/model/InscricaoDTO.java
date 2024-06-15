@@ -27,13 +27,13 @@ public class InscricaoDTO {
     private Long seq;
 
     @NotNull
-    @Size(max = 10)
-    private String identificador;
-
-    @NotNull
     private UUID idcurso;
 
     @NotNull
     private UUID idusuario;
+
+    @NotNull
+    private UUID idpagamentocurso;
+
 
 }

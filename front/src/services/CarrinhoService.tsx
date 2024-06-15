@@ -1,4 +1,6 @@
+import { ConexaoPOST } from "@/infra/Conexao";
 import CursoModel from "@/models/CursoModel";
+import FinalizarCopraModel from "@/models/FinalizarCompra";
 
 export default class CarrinhoService
 {
@@ -7,7 +9,11 @@ export default class CarrinhoService
         let cursos = new Array();
 
         for ( let key of  Object.keys(localStorage)){
-            const item = JSON.parse( localStorage.getItem(key) );
+            const valor = localStorage.getItem(key);
+            
+            if (! valor) continue;
+
+            const item = JSON.parse( valor );
             if ( Object.getOwnPropertyNames(item).indexOf("nomeCurso") <0 ) continue;
             
             cursos.push(  item as CursoModel )
@@ -30,6 +36,16 @@ export default class CarrinhoService
 
     count(){
         return this.getCursosCarrinho().length;
+    }
+    
+    finalizaCompra(finalizaCompra : FinalizarCopraModel){
+        ConexaoPOST("pagamento", JSON.stringify(finalizaCompra)).then(resposta =>{
+            if (resposta === true){
+                alert("Compra finalizada com sucesso!");
+                this.limpaCarrinho();
+                document.getElementById("btn_sala_aula")?.click();
+            }
+        })
     }
 
     

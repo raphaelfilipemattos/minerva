@@ -101,7 +101,7 @@ export default function Carrinho(){
                         </table>
                     </div>
                     <div className="modal-footer">
-                          <button className="btn btn-success">Finalizar compra</button>      
+                         {qtdCursos > 0 && <a href="/checkout" className="btn btn-success">Finalizar compra</a> }
                     </div>
                 </div>
                 </div>

@@ -11,7 +11,7 @@ class CursoModel implements InterfaceModel {
         return "Cursos";
     }
 
-    idCurso?: string;
+    idcurso?: string;
     nomeCurso?: string;
     descricaoCompleta?: string;
     apelido?:string;
